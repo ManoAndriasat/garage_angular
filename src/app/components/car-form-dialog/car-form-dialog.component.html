@@ -1,0 +1,36 @@
+<div class="p-8 bg-white rounded-lg shadow-lg">
+    <h2 class="text-xl font-semibold mb-4">Register Car</h2>
+    <form (ngSubmit)="submitForm()">
+        <div class="mb-3">
+            <label for="brand" class="block mb-2 text-sm font-medium text-gray-600">Brand</label>
+            <input type="text" name="brand" id="brand" [(ngModel)]="carData.brand"
+                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="model" class="block mb-2 text-sm font-medium text-gray-600">Model</label>
+            <input type="text" name="model" id="model" [(ngModel)]="carData.model"
+                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="year" class="block mb-2 text-sm font-medium text-gray-600">Year</label>
+            <input type="number" name="year" id="year" [(ngModel)]="carData.year"
+                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="plate" class="block mb-2 text-sm font-medium text-gray-600">Plate Number</label>
+            <input type="text" name="plate" id="plate" [(ngModel)]="carData.plate"
+                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+        </div>
+
+        <button type="submit" class="w-full p-2 mt-4 bg-indigo-600 text-white rounded shadow">
+            Register
+        </button>
+    </form>
+
+    <div class="flex justify-end p-4">
+        <button mat-button (click)="close()">Close</button>
+    </div>
+</div>
