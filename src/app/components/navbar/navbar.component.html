@@ -1,7 +1,7 @@
 <c-header>
   <c-container fluid>
     <c-header-brand [routerLink]="['/']">Customer</c-header-brand>
-    <c-header-nav class="ms-auto">
+    <c-header-nav class="ms-auto" *ngIf="userRole === 0">
       <c-nav-item>
         <a [routerLink]="['/login']" cNavLink>Login</a>
       </c-nav-item>
@@ -23,10 +23,9 @@
     </c-header-nav>
   </c-container>
 
-  
   <c-container fluid>
     <c-header-brand [routerLink]="['/']">Manager</c-header-brand>
-    <c-header-nav class="ms-auto">
+    <c-header-nav class="ms-auto" *ngIf="userRole === 10">
       <c-nav-item>
         <a [routerLink]="['/login']" cNavLink>Login</a>
       </c-nav-item>
@@ -42,10 +41,9 @@
     </c-header-nav>
   </c-container>
 
-
   <c-container fluid>
     <c-header-brand [routerLink]="['/']">Mecano</c-header-brand>
-    <c-header-nav class="ms-auto">
+    <c-header-nav class="ms-auto" *ngIf="userRole === 5">
       <c-nav-item>
         <a [routerLink]="['/login']" cNavLink>Login</a>
       </c-nav-item>
@@ -57,6 +55,7 @@
       </c-nav-item>
     </c-header-nav>
   </c-container>
+
   <c-header-divider />
   <c-container fluid>
     <c-header-text>Additional text</c-header-text>

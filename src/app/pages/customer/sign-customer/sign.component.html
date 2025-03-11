@@ -3,36 +3,45 @@
         <div class="max-w-md w-full mx-auto">
             <div class="bg-white rounded-lg overflow-hidden shadow-2xl">
                 <div class="p-8">
-                    <form method="POST" action="#">
+                    <form (submit)="registerUser(); $event.preventDefault()">
                         <div class="mb-3">
                             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-600">First Name</label>
-                            <input type="text" name="first_name" id="first_name" class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none">
+                            <input type="text" [(ngModel)]="user.firstname" name="first_name" id="first_name" 
+                                class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="block mb-2 text-sm font-medium text-gray-600">Last Name</label>
-                            <input type="text" name="last_name" id="last_name" class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none">
+                            <input type="text" [(ngModel)]="user.lastname" name="last_name" id="last_name"
+                                class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="contact" class="block mb-2 text-sm font-medium text-gray-600">Contact</label>
-                            <input type="text" name="contact" id="contact" class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none">
+                            <input type="text" [(ngModel)]="user.contact" name="contact" id="contact"
+                                class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="block mb-2 text-sm font-medium text-gray-600">Email</label>
-                            <input type="email" name="email" id="email" class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none">
+                            <input type="email" [(ngModel)]="user.email" name="email" id="email"
+                                class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="block mb-2 text-sm font-medium text-gray-600">Password</label>
-                            <input type="password" name="password" id="password" class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none">
+                            <input type="password" [(ngModel)]="user.password" name="password" id="password"
+                                class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                                required>
                         </div>
-                        <div class="mb-3">
-                            <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-600">Confirm Password</label>
-                            <input type="password" name="confirm_password" id="confirm_password" class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none">
-                        </div>
-                        <button type="submit" class="w-full p-2 mt-4 bg-indigo-600 text-white rounded shadow">Sign Up</button>
+                        <button type="submit"
+                            class="w-full p-2 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition duration-300">
+                            Sign Up
+                        </button>
                     </form>
                 </div>
                 <div class="flex justify-between p-8 text-sm border-t border-gray-300 bg-gray-100">
-                    <a href="http://localhost:4200/login" class="font-medium text-indigo-500">Already have an account? Login</a>
+                    <a href="http://localhost:4200/login" class="font-medium text-indigo-500 hover:underline">Already have an account? Login</a>
                 </div>
             </div>
         </div>

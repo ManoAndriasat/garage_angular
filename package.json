@@ -12,10 +12,10 @@
   "dependencies": {
     "@angular/animations": "^19.2.0",
     "@angular/cdk": "^19.2.2",
-    "@angular/common": "^19.2.0",
+    "@angular/common": "^19.2.1",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
-    "@angular/forms": "^19.2.0",
+    "@angular/forms": "^19.2.1",
     "@angular/material": "^19.2.2",
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
@@ -26,6 +26,8 @@
     "@popperjs/core": "~2.11.8",
     "@tailwindcss/postcss": "^4.0.12",
     "bootstrap": "^5.3.3",
+    "http": "^0.0.1-security",
+    "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
