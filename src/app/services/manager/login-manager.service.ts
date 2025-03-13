@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginCustomerService {
-  private apiUrl = 'http://localhost:5000/users';
+export class LoginManagerService {
+  private apiUrl = 'http://localhost:5000/managers';
 
   constructor(private http: HttpClient) {}
 

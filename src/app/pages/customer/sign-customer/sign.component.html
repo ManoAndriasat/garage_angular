@@ -6,13 +6,13 @@
                     <form (submit)="registerUser(); $event.preventDefault()">
                         <div class="mb-3">
                             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-600">First Name</label>
-                            <input type="text" [(ngModel)]="user.firstname" name="first_name" id="first_name" 
+                            <input type="text" [(ngModel)]="user.firstname" name="firstname" id="first_name" 
                                 class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                                 required>
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="block mb-2 text-sm font-medium text-gray-600">Last Name</label>
-                            <input type="text" [(ngModel)]="user.lastname" name="last_name" id="last_name"
+                            <input type="text" [(ngModel)]="user.lastname" name="lastname" id="last_name"
                                 class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                                 required>
                         </div>
@@ -34,6 +34,26 @@
                                 class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                                 required>
                         </div>
+
+                        <!-- Address Fields (Inline) -->
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label for="street" class="block mb-2 text-sm font-medium text-gray-600">Street</label>
+                                <input type="text" [(ngModel)]="user.address.street" name="street" id="street"
+                                    class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label for="city" class="block mb-2 text-sm font-medium text-gray-600">City</label>
+                                <input type="text" [(ngModel)]="user.address.city" name="city" id="city"
+                                    class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label for="lot" class="block mb-2 text-sm font-medium text-gray-600">Lot</label>
+                                <input type="text" [(ngModel)]="user.address.lot" name="lot" id="lot"
+                                    class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+
                         <button type="submit"
                             class="w-full p-2 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded shadow transition duration-300">
                             Sign Up

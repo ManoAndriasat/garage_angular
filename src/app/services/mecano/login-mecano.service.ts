@@ -1,5 +1,3 @@
-// login-customer.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -7,8 +5,8 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginCustomerService {
-  private apiUrl = 'http://localhost:5000/users';
+export class LoginMecanoService {
+  private apiUrl = 'http://localhost:5000/mechanics';
 
   constructor(private http: HttpClient) {}
 

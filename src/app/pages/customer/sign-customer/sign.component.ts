@@ -11,7 +11,15 @@ import { LoginCustomerService } from '../../../services/customer/login-customer.
   styleUrls: ['./sign.component.css']
 })
 export class SignComponent {
-  user = { firstname: '', lastname: '', contact: '', email: '', password: '' };
+  user = {
+    firstname: '',
+    lastname: '',
+    contact: '',
+    email: '',
+    password: '',
+    address: { street: '', city: '', lot: '' },
+    cars: []
+  };
   message = '';
 
   constructor(private userService: LoginCustomerService) {}
@@ -21,9 +29,10 @@ export class SignComponent {
     this.userService.registerUser(this.user).subscribe({
       next: (response) => {
         this.message = 'User registered successfully!';
+        window.location.href = '/login';
       },
       error: (error) => {
-        this.message = 'Registration failed: ' + error.error.msg;
+        this.message = 'Registration failed: ' + (error.error?.msg || 'Unknown error');
       }
     });
   }

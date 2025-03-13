@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoginCustomerService } from '../../services/customer/login-customer.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { HeaderModule, NavModule, DropdownModule, GridModule } from '@coreui/angular';
 import { RouterModule } from '@angular/router';
@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
 export class NavbarComponent {
   userRole: number | null = null;
 
-  constructor(private authService: LoginCustomerService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     const decodedToken = this.authService.decodeToken();
