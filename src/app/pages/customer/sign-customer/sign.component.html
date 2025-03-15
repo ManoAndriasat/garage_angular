@@ -1,9 +1,10 @@
 <body class="bg-gray-200 font-sans text-gray-700">
     <div class="container mx-auto p-8 flex">
-        <div class="max-w-md w-full mx-auto">
+        <div class="w-[50%] mx-auto">
             <div class="bg-white rounded-lg overflow-hidden shadow-2xl">
                 <div class="p-8">
                     <form (submit)="registerUser(); $event.preventDefault()">
+                        <div class="grid grid-cols-2 gap-3">
                         <div class="mb-3">
                             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-600">First Name</label>
                             <input type="text" [(ngModel)]="user.firstname" name="firstname" id="first_name" 
@@ -16,6 +17,7 @@
                                 class="block w-full p-2 rounded bg-gray-200 border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                                 required>
                         </div>
+                    </div>
                         <div class="mb-3">
                             <label for="contact" class="block mb-2 text-sm font-medium text-gray-600">Contact</label>
                             <input type="text" [(ngModel)]="user.contact" name="contact" id="contact"

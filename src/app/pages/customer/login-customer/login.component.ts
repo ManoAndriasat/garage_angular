@@ -25,6 +25,7 @@ export class LoginComponent {
       next: (response) => {
         console.log('Login successful:', response);
         this.authService.saveToken(response.token);
+        this.authService.saveUser(response.user);
         this.message = 'Login successful!';
         this.router.navigate(['/car-register']).then(() => {
           window.location.reload();
