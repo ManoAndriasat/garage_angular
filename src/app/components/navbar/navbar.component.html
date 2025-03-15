@@ -1,60 +1,53 @@
 <c-header>
   <c-container fluid>
-    <c-header-brand [routerLink]="['/']">Customer</c-header-brand>
+    <c-header-brand>
+      <a [routerLink]="['/login']" cNavLink>Login Customer</a>
+    </c-header-brand>
+
     <c-header-nav class="ms-auto" *ngIf="userRole === 0">
-      <c-nav-item>
-        <a [routerLink]="['/login']" cNavLink>Login</a>
-      </c-nav-item>
       <c-nav-item>
         <a [routerLink]="['/sign']" cNavLink>Sign</a>
       </c-nav-item>
       <c-nav-item>
         <a [routerLink]="['/car-register']" cNavLink>Car Register</a>
       </c-nav-item>
-      <c-nav-item>
-        <a [routerLink]="['/appointment-form']" cNavLink>Appointment Form</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a [routerLink]="['/appointment-list-customer']" cNavLink>Appointment List Customer</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a [routerLink]="['/car-on-repair-customer']" cNavLink>Car On Repair</a>
-      </c-nav-item>
     </c-header-nav>
   </c-container>
 
   <c-container fluid>
-    <c-header-brand [routerLink]="['/']">Manager</c-header-brand>
+    <c-header-brand>
+      <a [routerLink]="['/login-manager']" cNavLink>Login manager</a>
+    </c-header-brand>
+
     <c-header-nav class="ms-auto" *ngIf="userRole === 10">
       <c-nav-item>
-        <a [routerLink]="['/login']" cNavLink>Login</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a [routerLink]="['/appointment-list-manager']" cNavLink>Appointment List Manager</a>
+        <a [routerLink]="['/']" cNavLink>Login</a>
       </c-nav-item>
       <c-nav-item>
         <a [routerLink]="['/dashboard']" cNavLink>Dashboard</a>
       </c-nav-item>
+    </c-header-nav>
+  </c-container>
+
+  <c-container fluid>
+    <c-header-brand>
+      <a [routerLink]="['/login-mecano']" cNavLink>Login mecano</a>
+    </c-header-brand>
+
+    <c-header-nav class="ms-auto" *ngIf="userRole === 5">
       <c-nav-item>
-        <a [routerLink]="['/crud']" cNavLink>Crud</a>
+        <a [routerLink]="['/login-mecano']" cNavLink>Login</a>
+      </c-nav-item>
+      <c-nav-item>
+        <a [routerLink]="['/appointment-list-mecano']" cNavLink>Appointment List Mecano</a>
       </c-nav-item>
     </c-header-nav>
   </c-container>
 
   <c-container fluid>
-    <c-header-brand [routerLink]="['/']">Mecano</c-header-brand>
-    <c-header-nav class="ms-auto" *ngIf="userRole === 5">
-      <c-nav-item>
-        <a [routerLink]="['/login']" cNavLink>Login</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a [routerLink]="['/appointment-list-mecano']" cNavLink>Appointment List Mecano</a>
-      </c-nav-item>
-      <c-nav-item>
-        <a [routerLink]="['/car-on-repair-mecano']" cNavLink>Car On Repair</a>
-      </c-nav-item>
-    </c-header-nav>
+    <button (click)="logout()">Logout</button>
   </c-container>
+  
 
   <c-header-divider />
   <c-container fluid>

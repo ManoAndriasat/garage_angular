@@ -26,7 +26,9 @@ export class LoginManagerComponent {
         console.log('Login successful:', response);
         this.authService.saveToken(response.token);
         this.message = 'Login successful!';
-        this.router.navigate(['/appointment-list-manager']);
+        this.router.navigate(['/dashboard']).then(() => {
+          window.location.reload();
+        });
       },
       error: (error) => {
         console.error('Login failed:', error);

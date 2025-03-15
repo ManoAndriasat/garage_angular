@@ -26,7 +26,9 @@ export class LoginMecanoComponent {
         console.log('Login successful:', response);
         this.authService.saveToken(response.token);
         this.message = 'Login successful!';
-        this.router.navigate(['/appointment-list-mecano']);
+        this.router.navigate(['/appointment-list-mecano']).then(() => {
+          window.location.reload();
+        });
       },
       error: (error) => {
         console.error('Login failed:', error);
