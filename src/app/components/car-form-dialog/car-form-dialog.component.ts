@@ -6,6 +6,7 @@ import { CustomerService } from '../../services/customer/customer.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-car-form-dialog',
@@ -20,7 +21,7 @@ export class CarFormDialogComponent {
     private userService: CustomerService,
     private authService: AuthService,
     private http: HttpClient
-  ) {}
+  ) { }
 
   currentYear: number = new Date().getFullYear();
   years: number[] = Array.from({ length: this.currentYear - 1979 }, (_, i) => 1980 + i);
@@ -64,7 +65,7 @@ export class CarFormDialogComponent {
     this.carData.model = this.vinData.carDetails.Model;
     this.carData.year = this.vinData.carDetails.ModelYear;
     this.carData.vin = this.vinData.vin;
-   
+
     console.log('Cars Data:', this.vinData);
     this.userService.registerCar(this.carData).subscribe({
       next: (response) => {
@@ -82,7 +83,24 @@ export class CarFormDialogComponent {
 
   fetchCarDetailsByVin(vin: string): Observable<any> {
     const vinDecodedUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;
-    return this.http.get(vinDecodedUrl);
+    return this.http.get(vinDecodedUrl).pipe(
+      map((response: any) => {
+        if (response.Results && response.Results.length > 0) {
+          const filteredResult = Object.fromEntries(
+            Object.entries(response.Results[0]).filter(([key, value]) => value !== "")
+          );
+          response.Results[0] = filteredResult;
+        }
+        return response;
+      })
+    );
+  }
+
+  getCarDetailsAsArray(carDetails: any): { label: string, value: string }[] {
+    return Object.keys(carDetails).map(key => ({
+      label: key.split(/(?=[A-Z])/).join(' ').toUpperCase(), 
+      value: carDetails[key]
+    }));
   }
 
   handleVinSubmit() {
