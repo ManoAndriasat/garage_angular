@@ -38,6 +38,11 @@ export class AuthService {
     return null;
   }
 
+  getId(): string | null {
+    const decoded = this.decodeToken();
+    return decoded ? decoded.id : null;
+  }
+
   getUserRole(): number | null {
     const decoded = this.decodeToken();
     return decoded ? decoded.role : null;

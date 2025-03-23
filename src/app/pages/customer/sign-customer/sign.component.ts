@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoginCustomerService } from '../../../services/customer/login-customer.service';
+import { CustomerService } from '../../../services/customer/customer.service';
 
 @Component({
   selector: 'app-sign',
@@ -22,7 +22,7 @@ export class SignComponent {
   };
   message = '';
 
-  constructor(private userService: LoginCustomerService) {}
+  constructor(private userService: CustomerService) {}
 
   registerUser() {
     console.log('User Data:', this.user);

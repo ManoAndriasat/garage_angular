@@ -1,36 +1,111 @@
-<div class="p-8 bg-white rounded-lg shadow-lg">
-    <h2 class="text-xl font-semibold mb-4">Register Car</h2>
-    <form (ngSubmit)="submitForm()">
-        <div class="mb-3">
-            <label for="brand" class="block mb-2 text-sm font-medium text-gray-600">Brand</label>
-            <input type="text" name="brand" id="brand" [(ngModel)]="carData.brand"
-                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+<div>
+    <div class="p-3 bg-black"></div>
+    <div class="p-8 bg-white shadow-lg">
+        <div>
+            <p class="text-lg font-semibold mb-4 text-gray-700">Fetch Car Details by VIN</p>
+            <div class="flex gap-4 mb-6">
+                <input type="text" name="vin" id="vin" [(ngModel)]="vinData.vin" 
+                    class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Enter VIN" required value="4T1BF1FK7HU579396">
+                <button (click)="handleVinSubmit()"
+                    class="px-6 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition duration-200">
+                    Check VIN
+                </button>
+            </div>
+    
+            <!-- VIN Details Table -->
+            <div *ngIf="vinData.carDetails" class="mt-6">
+                <p class="text-lg font-semibold mb-4 text-gray-800">VIN Details:</p>
+                <div *ngIf="vinData.carDetails.Make && vinData.carDetails.Model && vinData.carDetails.ModelYear; else noDetails">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="p-2 border border-gray-300">Make</th>
+                                <th class="p-2 border border-gray-300">Model</th>
+                                <th class="p-2 border border-gray-300">Year</th>
+                                <th class="p-2 border border-gray-300">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 border border-gray-300">{{ vinData.carDetails.Make }}</td>
+                                <td class="p-2 border border-gray-300">{{ vinData.carDetails.Model }}</td>
+                                <td class="p-2 border border-gray-300">{{ vinData.carDetails.ModelYear }}</td>
+                                <td class="p-1 border border-gray-300">
+                                    <p class="mb-1"><strong>Body Class:</strong> {{ vinData.carDetails.BodyClass }}</p>
+                                    <p class="mb-1"><strong>Fuel Type:</strong> {{ vinData.carDetails.FuelType }}</p>
+                                    <p class="mb-1"><strong>Engine:</strong> {{ vinData.carDetails.Engine }}</p>
+                                    <p class="mb-1"><strong>Transmission:</strong> {{ vinData.carDetails.Transmission }}</p>
+                                    <p class="mb-1"><strong>Drive Type:</strong> {{ vinData.carDetails.DriveType }}</p>
+                                    <p class="mb-1"><strong>Color:</strong> {{ vinData.carDetails.Color }}</p>
+                                    <p class="mb-0"><strong>Odometer:</strong> {{ vinData.carDetails.Odometer }}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button (click)="registerCarByVin()"
+                        class="w-full p-2 mt-4 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-200">
+                        Register Car from VIN
+                    </button>
+                </div>
+                <ng-template #noDetails>
+                    <p class="text-red-500">No details found for this VIN. You can still register the car manually.</p>
+                </ng-template>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label for="model" class="block mb-2 text-sm font-medium text-gray-600">Model</label>
-            <input type="text" name="model" id="model" [(ngModel)]="carData.model"
-                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+    
+        <!-- Separator -->
+        <div class="flex items-center my-6">
+            <hr class="flex-1 border-gray-300">
+            <span class="mx-4 text-gray-500">OR</span>
+            <hr class="flex-1 border-gray-300">
         </div>
-
-        <div class="mb-3">
-            <label for="year" class="block mb-2 text-sm font-medium text-gray-600">Year</label>
-            <input type="number" name="year" id="year" [(ngModel)]="carData.year"
-                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+    
+        <!-- Manual Registration Form -->
+        <div>
+            <p class="text-lg font-semibold mb-4 text-gray-700">Register Car Manually</p>
+            <form (ngSubmit)="registerCar()">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-700">Brand</label>
+                        <input type="text" name="brand" id="brand" [(ngModel)]="carData.brand"
+                            class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            required>
+                    </div>
+    
+                    <div>
+                        <label for="model" class="block mb-2 text-sm font-medium text-gray-700">Model</label>
+                        <input type="text" name="model" id="model" [(ngModel)]="carData.model"
+                            class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            required>
+                    </div>
+    
+                    <div>
+                        <label for="year" class="block mb-2 text-sm font-medium text-gray-700">Year</label>
+                        <select name="year" id="year" [(ngModel)]="carData.year"
+                            class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            required>
+                            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <button type="submit"
+                    class="w-full p-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-200">
+                    Register
+                </button>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label for="plate" class="block mb-2 text-sm font-medium text-gray-600">Plate Number</label>
-            <input type="text" name="plate" id="plate" [(ngModel)]="carData.plate"
-                class="block w-full p-2 rounded bg-gray-200 border border-transparent focus:outline-none" required>
+    
+        <!-- Error Message -->
+        <p *ngIf="message" class="mt-4 text-sm text-red-500">{{ message }}</p>
+    
+        <!-- Close Button -->
+        <div class="flex justify-end mt-6">
+            <button (click)="close()"
+                class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition duration-200">
+                Close
+            </button>
         </div>
-
-        <button type="submit" class="w-full p-2 mt-4 bg-indigo-600 text-white rounded shadow">
-            Register
-        </button>
-    </form>
-
-    <div class="flex justify-end p-4">
-        <button mat-button (click)="close()">Close</button>
     </div>
 </div>
