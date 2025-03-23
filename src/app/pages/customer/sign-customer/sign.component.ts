@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustomerService } from '../../../services/customer/customer.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sign',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.css']
 })

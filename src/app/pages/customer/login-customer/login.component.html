@@ -25,7 +25,7 @@
             </div>
             <p *ngIf="message" class="text-center text-red-500 font-medium p-2">{{ message }}</p>
             <div class="flex justify-between p-6 text-sm border-t border-gray-200 bg-gray-50">
-                <a href="http://localhost:4200/sign" class="font-medium text-indigo-600 hover:underline">
+                <a [routerLink]="['/sign']" class="font-medium text-indigo-600 hover:underline">
                     Create Account
                 </a>
             </div>
