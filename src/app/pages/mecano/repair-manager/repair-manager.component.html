@@ -1,0 +1,106 @@
+<p>repair-manager works!</p>
+<div class="min-h-screen p-6 bg-gray-100 flex justify-center">
+    <div class="container max-w-screen-lg mx-auto">
+      <div>
+        <h2 class="font-semibold text-xl text-gray-600">Repair Management</h2>
+        <p class="text-gray-500 mb-6">Please fill in all the required details.</p>
+  
+        <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+          <div class="grid gap-4 gap-y-2 text-sm grid-cols-12">
+            <!-- Car ID -->
+            <div class="col-span-12">
+              <label for="car_id">Car ID</label>
+              <input type="text" name="car_id" id="car_id"
+                class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                [(ngModel)]="formData.car_id" required />
+            </div>
+  
+            <!-- Mechanic ID -->
+            <div class="col-span-12">
+              <label for="mechanic_id">Mechanic ID</label>
+              <input type="text" name="mechanic_id" id="mechanic_id"
+                class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                [(ngModel)]="formData.mechanic_id" required />
+            </div>
+  
+            <!-- Reparations Section -->
+            <div class="col-span-12">
+              <h3 class="font-medium">Reparation Items</h3>
+              
+              <div *ngFor="let item of formData.reparation; let i = index" 
+                   class="reparation-item grid gap-4 gap-y-2 text-sm grid-cols-12 mt-4 p-4 border border-gray-200 rounded">
+                
+                <!-- Type -->
+                <div class="col-span-12 md:col-span-4">
+                  <label [for]="'type_' + i">Type</label>
+                  <input type="text" [name]="'type_' + i" [id]="'type_' + i"
+                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    [(ngModel)]="item.type" required />
+                </div>
+  
+                <!-- Material -->
+                <div class="col-span-12 md:col-span-3">
+                  <label [for]="'material_' + i">Material (optional)</label>
+                  <input type="text" [name]="'material_' + i" [id]="'material_' + i"
+                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    [(ngModel)]="item.material" />
+                </div>
+  
+                <!-- Start Date -->
+                <div class="col-span-12 md:col-span-2">
+                  <label [for]="'start_' + i">Start Date</label>
+                  <input type="datetime-local" [name]="'start_' + i" [id]="'start_' + i"
+                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    [(ngModel)]="item.start" required />
+                </div>
+  
+                <!-- End Date -->
+                <div class="col-span-12 md:col-span-2">
+                  <label [for]="'end_' + i">End Date</label>
+                  <input type="datetime-local" [name]="'end_' + i" [id]="'end_' + i"
+                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    [(ngModel)]="item.end" required />
+                </div>
+  
+                <!-- Remove Button -->
+                <div class="col-span-12 md:col-span-1 flex items-end">
+                  <button *ngIf="formData.reparation.length > 1" 
+                          type="button" 
+                          (click)="removeReparation(i)"
+                          class="text-red-500 hover:text-red-700 text-sm">
+                    Remove
+                  </button>
+                </div>
+  
+                <!-- Description -->
+                <div class="col-span-12">
+                  <label [for]="'description_' + i">Description</label>
+                  <textarea [name]="'description_' + i" [id]="'description_' + i" rows="2"
+                    class="border mt-1 rounded px-4 w-full bg-gray-50" 
+                    [(ngModel)]="item.description" required></textarea>
+                </div>
+              </div>
+  
+              <!-- Add Reparation Button -->
+              <div class="col-span-12 mt-2">
+                <button type="button" 
+                        (click)="addReparation()" 
+                        class="text-blue-500 hover:text-blue-700 underline">
+                  + Add Another Reparation Item
+                </button>
+              </div>
+            </div>
+  
+            <!-- Submit Button -->
+            <div class="col-span-12 mt-4">
+              <button type="submit" 
+                      (click)="submitForm()" 
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Submit Repair Request
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,66 +1,80 @@
-<div>
-    <div class="m-10">
-        Car on Repair
+<div class="m-10">
+    <h2 class="text-2xl font-bold mb-6">Cars Under Repair</h2>
+  
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="text-center py-10">
+      <p>Loading repair information...</p>
     </div>
-
-    <div class="px-10 py-2 w-full">
-        <h1 class="text-2xl">Brand - Model</h1>
-        <hr>
-        <div class="information">
-            <p>Date 20/02/2025 - 25-03-2025</p>
-            <div class="flex item-center justify-between bg-gray-200 p-2 my-2 rounded-sm">
-                <div class="information flex gap-5">
-                    <p><strong>probleme</strong></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-                </div>
-                <div class="information flex gap-5">
-                    <p>accept</p>
-                    <p>reject</p>
-                </div>
-            </div>
-            <div class="flex item-center justify-between bg-gray-200 p-2 my-2 rounded-sm">
-                <div class="information flex gap-5">
-                    <p><strong>probleme</strong></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-                </div>
-                <div class="information flex gap-5">
-                    <p>accept</p>
-                    <p>reject</p>
-                </div>
-            </div>
+  
+    <!-- Error state -->
+    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ error }}
+      <button (click)="loadRepairs()" class="ml-4 text-blue-600">Retry</button>
+    </div>
+  
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && !error && repairs.length === 0" class="text-center py-10">
+      <p>No cars currently under repair.</p>
+    </div>
+  
+    <!-- Repairs list -->
+    <div *ngFor="let repair of repairs" class="mb-8 p-6 bg-white rounded-lg shadow">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-xl font-semibold">
+            {{ getCarBrandModel(repair.car_id) }}
+            <span class="text-sm font-normal text-gray-600">
+              (Repair ID: {{ repair._id }})
+            </span>
+          </h3>
+          
+          <div class="mt-2">
+            <p class="text-gray-600">
+              <span class="font-medium">Mechanic:</span> 
+              {{ getMechanicName(repair.mechanic_id) }}
+            </p>
+          </div>
         </div>
-    </div>
-
-    <div class="px-10 py-2 w-full">
-        <h1 class="text-2xl">Brand - Model</h1>
-        <hr>
-        <div class="information">
-            <p>Date 20/02/2025 - 25-03-2025</p>
-            <div class="flex item-center justify-between bg-gray-200 p-2 my-2 rounded-sm">
-                <div class="information flex gap-5">
-                    <p><strong>probleme</strong></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-                </div>
-                <div class="information flex gap-5">
-
-                </div>
-            </div>
-            <div class="flex item-center justify-between bg-gray-200 p-2 my-2 rounded-sm">
-                <div class="information flex gap-5">
-                    <p><strong>probleme</strong></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-                </div>
-                <div class="information flex gap-5">
-                    <p>accept</p>
-                    <p>reject</p>
-                </div>
-            </div>
+      </div>
+  
+      <hr class="my-4">
+  
+      <h4 class="font-medium mb-3">Repair Items:</h4>
+      
+      <div class="grid grid-cols-12 gap-2 text-sm border-b border-gray-200 pb-2 mb-2 font-medium">
+        <div class="col-span-4">Type</div>
+        <div class="col-span-4">Description</div>
+        <div class="col-span-2">Period</div>
+        <div class="col-span-2">Actions</div>
+      </div>
+  
+      <div *ngFor="let item of repair.reparation; let i = index" 
+           class="grid grid-cols-12 gap-2 text-sm py-2 border-b border-gray-100 items-center">
+        <div class="col-span-4 font-medium text-gray-900">
+          {{ item.type }}
+          <span *ngIf="item.material" class="block text-xs text-gray-500">
+            ({{ item.material }})
+          </span>
         </div>
+        <div class="col-span-4 text-gray-600">
+          {{ item.description }}
+        </div>
+        <div class="col-span-2 text-gray-500 text-xs">
+          {{ formatDate(item.start) }}<br>
+          to {{ formatDate(item.end) }}
+        </div>
+        <div class="col-span-2 flex gap-2">
+          <button (click)="updateRepairStatus(repair._id, i, true)"
+                  class="text-green-600 hover:text-green-800 text-xs"
+                  [disabled]="!item.status.user">
+            {{ item.status.user ? 'Approved' : 'Approve' }}
+          </button>
+          <button (click)="updateRepairStatus(repair._id, i, false)"
+                  class="text-red-600 hover:text-red-800 text-xs"
+                  [disabled]="!item.status.user">
+            {{ item.status.user ? 'Reject' : 'Rejected' }}
+          </button>
+        </div>
+      </div>
     </div>
-
-
-</div>
+  </div>

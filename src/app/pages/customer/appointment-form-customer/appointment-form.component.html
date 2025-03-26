@@ -1,57 +1,66 @@
 <div class="min-h-screen p-6 bg-gray-100 flex justify-center">
     <div class="container max-w-screen-lg mx-auto">
         <div>
-            <h2 class="font-semibold text-xl text-gray-600">Responsive Form</h2>
-            <p class="text-gray-500 mb-6">Form is mobile responsive. Give it a try.</p>
+            <h2 class="font-semibold text-xl text-gray-600">Appointment Form</h2>
+            <p class="text-gray-500 mb-6">Please fill in all the required details.</p>
 
             <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div class="grid gap-4 gap-y-2 text-sm grid-cols-12">
                     <div class="col-span-12">
-                        <label for="car">Car</label>
-                        <input type="text" name="car" id="car"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.car" />
+                        <label for="car_id">Car ID</label>
+                        <input type="text" name="car_id" id="car_id"
+                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.car_id" required />
                     </div>
 
                     <div class="col-span-12">
-                        <label for="date">Date</label>
-                        <input type="text" name="date" id="date"
+                        <label for="mechanic_id">Mechanic ID</label>
+                        <input type="text" name="mechanic_id" id="mechanic_id"
+                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.mechanic_id" required />
+                    </div>
+
+                    <div class="col-span-12">
+                        <label for="date">Date and Time</label>
+                        <input type="datetime-local" name="date" id="date"
                             class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.date"
-                            placeholder="date" />
+                            required />
                     </div>
 
                     <div class="col-span-12">
                         <label for="localisation">localisation</label>
                         <input type="text" name="localisation" id="localisation"
                             class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.localisation"
-                            placeholder="localisation" />
+                            placeholder="Enter location" required />
                     </div>
 
-                    <!-- Loop through problems array to dynamically add input fields -->
-                    <div class="problem col-span-12 grid gap-1 text-sm grid-cols-12" *ngFor="let problem of formData.problems; let i = index">
-                        <div class="col-span-3">
-                            <label for="problem">Problem</label>
-                            <input type="text" name="problem" id="problem" [(ngModel)]="problem.name"
-                                class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" />
-                        </div>
+                    <!-- Problems section -->
+                    <div class="col-span-12">
+                        <h3 class="font-medium">Problems</h3>
+                        <div *ngFor="let problem of formData.problem; let i = index" class="problem-section grid gap-4 gap-y-2 text-sm grid-cols-12 mt-2">
+                            <div class="col-span-3">
+                                <label [for]="'material_' + i">Material</label>
+                                <input type="text" [name]="'material_' + i" [id]="'material_' + i"
+                                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                                    [(ngModel)]="problem.material" />
+                            </div>
 
-                        <div class="col-span-8">
-                            <label for="details">Details</label>
-                            <input type="text" name="details" id="details" [(ngModel)]="problem.details"
-                                class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" />
+                            <div class="col-span-8">
+                                <label [for]="'description_' + i">Description</label>
+                                <input type="text" [name]="'description_' + i" [id]="'description_' + i"
+                                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                                    [(ngModel)]="problem.description" required />
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Button to add more problem fields -->
                     <div class="col-span-12">
                         <button type="button" (click)="addProblem()" class="text-blue-500 hover:text-blue-700 underline">
-                            Add Problem
+                            Add Another Problem
                         </button>
                     </div>
 
-                    <!-- Submit button -->
                     <div class="col-span-12 mt-4">
-                        <button type="submit" (click)="submitForm()" class="bg-blue-500 text-white p-2 rounded">
-                            Submit
+                        <button type="submit" (click)="submitForm()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Submit Appointment
                         </button>
                     </div>
                 </div>

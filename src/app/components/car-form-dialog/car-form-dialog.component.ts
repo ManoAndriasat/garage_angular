@@ -66,7 +66,7 @@ export class CarFormDialogComponent {
     this.carData.year = this.vinData.carDetails.ModelYear;
     this.carData.vin = this.vinData.vin;
 
-    console.log('Cars Data:', this.vinData);
+    console.log('Cars Data:', this.carData);
     this.userService.registerCar(this.carData).subscribe({
       next: (response) => {
         this.message = 'Car registered successfully!';

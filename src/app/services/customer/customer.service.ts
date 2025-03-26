@@ -35,9 +35,45 @@ export class CustomerService {
       'Authorization': `Bearer ${this.authService.getToken()}`, 
       'Content-Type': 'application/json'
     });
-  
     return this.http.get(`${this.apiUrl}/cars`, { headers });
-  }  
+  }
+
+  createAppointment(appointment: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`, 
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(`${this.apiUrl}/appointment`, appointment, { headers });
+  }
+
+  getAppointments(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`, 
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(`${this.apiUrl}/appointments`, { headers });
+  }
+
+  getRepairs(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(`${this.apiUrl}/repairs`, { headers });
+  }
+
+  updateRepairStatus(repairId: string, itemIndex: number, status: boolean): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    const body = {
+      repairId,
+      itemIndex,
+      status
+    };
+    return this.http.patch(`${this.apiUrl}/status`, body, { headers });
+  }
 }
 
 
