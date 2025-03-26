@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.css']
 })
-export class SignComponent {
+export class SignComponent{
   user = {
     firstname: '',
     lastname: '',
@@ -23,9 +23,9 @@ export class SignComponent {
   };
   message = '';
 
-  constructor(private userService: CustomerService) {}
+  constructor(private userService: CustomerService){}
 
-  registerUser() {
+  registerUser(){
     console.log('User Data:', this.user);
     this.userService.registerUser(this.user).subscribe({
       next: (response) => {
