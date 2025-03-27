@@ -14,6 +14,7 @@ import { AppointmentListManagerComponent } from './pages/manager/appointment-lis
 import { DashboardComponent } from './pages/manager/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { FutureAppointmentComponent } from './pages/mecano/future-appointment/future-appointment.component';
+import { AppointmentHistoryComponent } from './pages/mecano/appointment-history/appointment-history.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,6 +27,7 @@ export const routes: Routes = [
 
     {path: 'login-mecano', component: LoginMecanoComponent},
     {path: 'appointment-list-mecano', component: AppointmentListMecanoComponent, canActivate: [AuthGuard], data: { roles: [5] }},
+    {path: 'appointment-history', component: AppointmentHistoryComponent, canActivate: [AuthGuard], data: { roles: [5] }},
     {path: 'future-appointment', component: FutureAppointmentComponent, canActivate: [AuthGuard], data: { roles: [5] }},
     {path: 'car-on-repair-mecano', component: CarOnRepairMecanoComponent,canActivate: [AuthGuard], data: { roles: [5] }},
     {path: 'repair-manager', component: RepairManagerComponent,canActivate: [AuthGuard], data: { roles: [5] }},

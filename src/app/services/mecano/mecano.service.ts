@@ -51,6 +51,14 @@ export class MecanoService {
     return this.http.get(`${this.apiUrl}/appointments`, { headers });
   }
 
+  getLastAppointments(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(`${this.apiUrl}/history-appointments`, { headers });
+  }
+
   validateAppointment(appointmentId: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`,

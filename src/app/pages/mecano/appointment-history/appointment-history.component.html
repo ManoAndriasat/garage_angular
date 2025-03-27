@@ -1,0 +1,57 @@
+<div class="m-10">
+    <div class="mb-3 p-6  shadow text-white bg-blue-900">
+        Waiting Appointments
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="text-center py-10">
+        <p>Loading appointments...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3  mb-4">
+        {{ error }}
+        <button (click)="loadAppointments()" class="ml-4 text-blue-600">Retry</button>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && !error && appointments.length === 0" class="text-center py-10">
+        <p>No waiting appointments found.</p>
+    </div>
+
+    <!-- Appointments list -->
+    <div *ngFor="let appointment of appointments" class="mb-8 p-6 bg-white  shadow">
+        <div class="flex justify-between items-start">
+            <div>
+                <h3 class="text-xl font-semibold">
+                    {{ appointment.car.brand }} {{ appointment.car.model }} {{ appointment.car.year }}
+                    <span class="text-sm font-normal text-gray-600">
+                        ({{ formatDate(appointment.date) }})
+                    </span>
+                </h3>
+
+                <div class="mt-2">
+                    <p class="text-gray-600">
+                        <span class="font-medium">Customer:</span>
+                        {{ appointment.user.firstname }} {{ appointment.user.lastname }} - {{ appointment.user.contact }}
+                    </p>
+                    <p class="text-gray-600">
+                        <span class="font-medium">Location:</span>
+                        {{ appointment.localisation }}
+                    </p>
+                    <p class="text-gray-600">
+                        <span class="font-medium">Time:</span>
+                        {{ formatTime(appointment.start_time) }} - {{ formatTime(appointment.end_time) }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex space-x-2 gap-2">
+                <button
+                    class="px-4 py-2 bg-indigo-600 text-white  hover:bg-indigo-700">
+                    Begin Repair
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
