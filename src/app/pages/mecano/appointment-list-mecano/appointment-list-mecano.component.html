@@ -1,5 +1,5 @@
 <div class="m-10">
-    <div class="mb-3 p-6 rounded-lg shadow text-white bg-blue-900">
+    <div class="mb-3 p-6  shadow text-white bg-blue-900">
         Waiting Appointments
     </div>
 
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Error state -->
-    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3  mb-4">
         {{ error }}
         <button (click)="loadAppointments()" class="ml-4 text-blue-600">Retry</button>
     </div>
@@ -20,7 +20,7 @@
     </div>
 
     <!-- Appointments list -->
-    <div *ngFor="let appointment of appointments" class="mb-8 p-6 bg-white rounded-lg shadow">
+    <div *ngFor="let appointment of appointments" class="mb-8 p-6 bg-white  shadow">
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="text-xl font-semibold">
@@ -33,7 +33,7 @@
                 <div class="mt-2">
                     <p class="text-gray-600">
                         <span class="font-medium">Customer:</span>
-                        {{ appointment.user_id }}
+                        {{ appointment.user.firstname }} {{ appointment.user.lastname }} - {{ appointment.user.contact }}
                     </p>
                     <p class="text-gray-600">
                         <span class="font-medium">Location:</span>
@@ -46,17 +46,17 @@
                 </div>
             </div>
 
-            <div class="flex space-x-2">
+            <div class="flex space-x-2 gap-2">
                 <button (click)="validateAppointment(appointment._id)"
-                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                    class="px-4 py-2 bg-green-600 text-white  hover:bg-green-700">
                     Validate
                 </button>
                 <button (click)="openRescheduleModal(appointment)"
-                    class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                    class="px-4 py-2 bg-yellow-600 text-white  hover:bg-yellow-700">
                     Reschedule
                 </button>
                 <button (click)="deleteAppointment(appointment._id)"
-                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                    class="px-4 py-2 bg-red-600 text-white  hover:bg-red-700">
                     Reject
                 </button>
             </div>
@@ -64,7 +64,7 @@
 
         <div class="mt-2">
             <button (click)="toggleVinDetails(appointment.car.vin)"
-                class="px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+                class="px-3 py-1 text-sm bg-gray-100 text-gray-800  hover:bg-gray-200"
                 [disabled]="loadingVins[appointment.car.vin]">
                 <span *ngIf="!loadingVins[appointment.car.vin]">
                     {{ vinDetailsMap[appointment.car.vin] ? 'Hide VIN Details' : 'Show VIN Details' }}
@@ -82,12 +82,10 @@
                 </span>
             </button>
 
-            <!-- VIN Details Section -->
-            <div *ngIf="vinDetailsMap[appointment.car.vin]" class="mt-3 p-3 bg-gray-50 rounded-lg">
-                <h4 class="font-medium text-gray-800 mb-2">VIN Details</h4>
+            <div *ngIf="vinDetailsMap[appointment.car.vin]" class="mt-3 p-2 bg-gray-50 h-[200px] overflow-y-auto">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div *ngFor="let detail of getCarDetailsAsArray(vinDetailsMap[appointment.car.vin])"
-                        class="bg-white p-2 rounded shadow-xs">
+                        class="bg-white p-2  shadow-xs">
                         <p class="text-xs font-medium text-gray-600">{{ detail.label }}</p>
                         <p class="text-sm text-gray-800">{{ detail.value }}</p>
                     </div>
@@ -109,12 +107,6 @@
                 <div class="col-span-9">Description</div>
             </div>
 
-
-
-
-
-
-
             <div *ngFor="let problem of appointment.problem"
                 class="grid grid-cols-12 gap-2 text-sm py-1 border-b border-gray-100">
                 <div class="col-span-3 font-medium text-gray-900 truncate">
@@ -127,7 +119,7 @@
         </div>
 
         <div class="mt-4">
-            <span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+            <span class="px-3 py-1 -full text-sm font-medium bg-yellow-100 text-yellow-800">
                 Waiting for your confirmation
             </span>
         </div>
@@ -135,21 +127,21 @@
 
     <!-- Reschedule Modal -->
     <div *ngIf="showRescheduleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <div class="bg-white  p-6 w-full max-w-md">
             <h3 class="text-lg font-semibold mb-4">Reschedule Appointment</h3>
 
             <div class="mb-4">
                 <label class="block text-gray-700 mb-2">New Start Time</label>
-                <input type="datetime-local" [(ngModel)]="rescheduleData.newStartTime" class="w-full p-2 border rounded"
+                <input type="datetime-local" [(ngModel)]="rescheduleData.newStartTime" class="w-full p-2 border "
                     [value]="rescheduleData.newStartTime | date:'yyyy-MM-ddTHH:mm'">
             </div>
 
             <div class="flex justify-end space-x-3">
-                <button (click)="showRescheduleModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                <button (click)="showRescheduleModal = false" class="px-4 py-2 bg-gray-300  hover:bg-gray-400">
                     Cancel
                 </button>
                 <button (click)="rescheduleAppointment()"
-                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    class="px-4 py-2 bg-blue-600 text-white  hover:bg-blue-700">
                     Confirm
                 </button>
             </div>

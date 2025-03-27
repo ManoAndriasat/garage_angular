@@ -77,7 +77,14 @@ export class AppointmentFormComponent implements OnInit {
     dateObj.setHours(dateObj.getHours() + 1);
     this.formData.end_time = dateObj.toISOString();
 
-    const user_id = this.authService.getId();
+    const user_details = this.authService.getUser();
+    const user = {
+      _id: this.authService.getId(),
+      firstname: user_details.firstname,
+      lastname: user_details.lastname,
+      contact: user_details.contact,
+      email: user_details.email
+    };
 
     const selectedMechanic = {
       _id: this.formData.mechanic._id,
@@ -85,9 +92,9 @@ export class AppointmentFormComponent implements OnInit {
       lastname: this.formData.mechanic.lastname,
       contact: this.formData.mechanic.contact
     }
-    
+
     const appointmentData = {
-      user_id,
+      user,
       car: this.formData.car,  // Send entire car object
       mechanic: selectedMechanic,  // Send entire mechanic object
       date: this.formData.date,

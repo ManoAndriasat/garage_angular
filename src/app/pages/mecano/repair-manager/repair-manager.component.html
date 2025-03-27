@@ -5,13 +5,13 @@
         <h2 class="font-semibold text-xl text-gray-600">Repair Management</h2>
         <p class="text-gray-500 mb-6">Please fill in all the required details.</p>
   
-        <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="bg-white  shadow-lg p-4 px-4 md:p-8 mb-6">
           <div class="grid gap-4 gap-y-2 text-sm grid-cols-12">
             <!-- Car ID -->
             <div class="col-span-12">
               <label for="car_id">Car ID</label>
               <input type="text" name="car_id" id="car_id"
-                class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                 [(ngModel)]="formData.car_id" required />
             </div>
   
@@ -19,7 +19,7 @@
             <div class="col-span-12">
               <label for="mechanic_id">Mechanic ID</label>
               <input type="text" name="mechanic_id" id="mechanic_id"
-                class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                 [(ngModel)]="formData.mechanic_id" required />
             </div>
   
@@ -28,13 +28,13 @@
               <h3 class="font-medium">Reparation Items</h3>
               
               <div *ngFor="let item of formData.reparation; let i = index" 
-                   class="reparation-item grid gap-4 gap-y-2 text-sm grid-cols-12 mt-4 p-4 border border-gray-200 rounded">
+                   class="reparation-item grid gap-4 gap-y-2 text-sm grid-cols-12 mt-4 p-4 border border-gray-200 ">
                 
                 <!-- Type -->
                 <div class="col-span-12 md:col-span-4">
                   <label [for]="'type_' + i">Type</label>
                   <input type="text" [name]="'type_' + i" [id]="'type_' + i"
-                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                     [(ngModel)]="item.type" required />
                 </div>
   
@@ -42,7 +42,7 @@
                 <div class="col-span-12 md:col-span-3">
                   <label [for]="'material_' + i">Material (optional)</label>
                   <input type="text" [name]="'material_' + i" [id]="'material_' + i"
-                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                     [(ngModel)]="item.material" />
                 </div>
   
@@ -50,7 +50,7 @@
                 <div class="col-span-12 md:col-span-2">
                   <label [for]="'start_' + i">Start Date</label>
                   <input type="datetime-local" [name]="'start_' + i" [id]="'start_' + i"
-                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                     [(ngModel)]="item.start" required />
                 </div>
   
@@ -58,7 +58,7 @@
                 <div class="col-span-12 md:col-span-2">
                   <label [for]="'end_' + i">End Date</label>
                   <input type="datetime-local" [name]="'end_' + i" [id]="'end_' + i"
-                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                    class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                     [(ngModel)]="item.end" required />
                 </div>
   
@@ -76,7 +76,7 @@
                 <div class="col-span-12">
                   <label [for]="'description_' + i">Description</label>
                   <textarea [name]="'description_' + i" [id]="'description_' + i" rows="2"
-                    class="border mt-1 rounded px-4 w-full bg-gray-50" 
+                    class="border mt-1  px-4 w-full bg-gray-50" 
                     [(ngModel)]="item.description" required></textarea>
                 </div>
               </div>
@@ -95,7 +95,7 @@
             <div class="col-span-12 mt-4">
               <button type="submit" 
                       (click)="submitForm()" 
-                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ">
                 Submit Repair Request
               </button>
             </div>

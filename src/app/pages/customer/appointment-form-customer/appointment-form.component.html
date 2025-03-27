@@ -4,13 +4,13 @@
             <h2 class="font-semibold text-xl text-gray-600">Appointment Form</h2>
             <p class="text-gray-500 mb-6">Please fill in all the required details.</p>
 
-            <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+            <div class="bg-white  shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div class="grid gap-4 gap-y-2 text-sm grid-cols-12">
                     <!-- Car Selection -->
                     <div class="col-span-12">
                         <label for="car">Select Car</label>
                         <select name="car" id="car"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            class="h-10 border mt-1  px-4 w-full bg-gray-50"
                             [(ngModel)]="formData.car" required>
                             <option [ngValue]="null">Select a car</option>
                             <option *ngFor="let car of cars" [ngValue]="car">
@@ -23,7 +23,7 @@
                     <div class="col-span-12">
                         <label for="mechanic">Select Mechanic</label>
                         <select name="mechanic" id="mechanic"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            class="h-10 border mt-1  px-4 w-full bg-gray-50"
                             [(ngModel)]="formData.mechanic" required>
                             <option [ngValue]="null">Select a mechanic</option>
                             <option *ngFor="let mechanic of mechanics" [ngValue]="mechanic">
@@ -36,7 +36,7 @@
                     <div class="col-span-12">
                         <label for="date">Date and Time</label>
                         <input type="datetime-local" name="date" id="date"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.date"
+                            class="h-10 border mt-1  px-4 w-full bg-gray-50" [(ngModel)]="formData.date"
                             required />
                     </div>
 
@@ -44,7 +44,7 @@
                     <div class="col-span-12">
                         <label for="localisation">Location</label>
                         <input type="text" name="localisation" id="localisation"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.localisation"
+                            class="h-10 border mt-1  px-4 w-full bg-gray-50" [(ngModel)]="formData.localisation"
                             placeholder="Enter location" required />
                     </div>
 
@@ -55,14 +55,14 @@
                             <div class="col-span-3">
                                 <label [for]="'material_' + i">Material</label>
                                 <input type="text" [name]="'material_' + i" [id]="'material_' + i"
-                                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                                    class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                                     [(ngModel)]="problem.material" />
                             </div>
 
                             <div class="col-span-8">
                                 <label [for]="'description_' + i">Description</label>
                                 <input type="text" [name]="'description_' + i" [id]="'description_' + i"
-                                    class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" 
+                                    class="h-10 border mt-1  px-4 w-full bg-gray-50" 
                                     [(ngModel)]="problem.description" required />
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="col-span-12 mt-4">
-                        <button type="submit" (click)="submitForm()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button type="submit" (click)="submitForm()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ">
                             Submit Appointment
                         </button>
                     </div>

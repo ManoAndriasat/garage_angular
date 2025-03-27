@@ -7,10 +7,10 @@
             <p class="block mb-2 text-sm font-medium text-gray-700">VIN (Vehicle Identification Number) <span class="text-[10px]">optional</span></p>
             <div class="flex gap-4 mb-6">
                 <input type="text" name="vin" id="vin" [(ngModel)]="vinData.vin"
-                    class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="flex-1 p-2  border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter VIN" required value="4T1BF1FK7HU579396">
                 <button (click)="handleVinSubmit()"
-                    class="px-6 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-200">
+                    class="px-6 bg-indigo-600 text-white  shadow hover:bg-indigo-700 transition duration-200">
                     Check VIN
                 </button>
             </div>
@@ -18,10 +18,10 @@
             <!-- VIN Details Container -->
             <div *ngIf="vinData.carDetails" class="mt-6">
                 <p class="mb-4 text-gray-800">VIN Details:</p>
-                <div class="h-64 overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="h-64 overflow-y-auto p-4 bg-gray-50  border border-gray-200">
                     <div class="space-y-3">
                         <div *ngFor="let detail of getCarDetailsAsArray(vinData.carDetails)"
-                            class="flex justify-between items-center p-2 bg-white rounded-lg shadow-sm">
+                            class="flex justify-between items-center p-2 bg-white  shadow-sm">
                             <span class="text-sm font-medium text-gray-600">{{ detail.label }}:</span>
                             <span class="text-sm text-gray-800">{{ detail.value }}</span>
                         </div>
@@ -49,21 +49,21 @@
                     <div>
                         <label for="brand" class="block mb-2 text-sm font-medium text-gray-700">Brand</label>
                         <input type="text" name="brand" id="brand" [(ngModel)]="carData.brand"
-                            class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="w-full p-2  border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             required>
                     </div>
 
                     <div>
                         <label for="model" class="block mb-2 text-sm font-medium text-gray-700">Model</label>
                         <input type="text" name="model" id="model" [(ngModel)]="carData.model"
-                            class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="w-full p-2  border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             required>
                     </div>
 
                     <div>
                         <label for="year" class="block mb-2 text-sm font-medium text-gray-700">Year</label>
                         <select name="year" id="year" [(ngModel)]="carData.year"
-                            class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            class="w-full p-2  border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             required>
                             <option *ngFor="let year of years" [value]="year">{{ year }}</option>
                         </select>
@@ -71,7 +71,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full p-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-200">
+                    class="w-full p-2 bg-indigo-600 text-white  shadow hover:bg-indigo-700 transition duration-200">
                     Register
                 </button>
             </form>
@@ -83,7 +83,7 @@
         <!-- Close Button -->
         <div class="flex justify-end mt-6">
             <button (click)="close()"
-                class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition duration-200">
+                class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100  transition duration-200">
                 Close
             </button>
         </div>

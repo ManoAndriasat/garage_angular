@@ -7,7 +7,7 @@
     </div>
   
     <!-- Error state -->
-    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3  mb-4">
       {{ error }}
       <button (click)="loadRepairs()" class="ml-4 text-blue-600">Retry</button>
     </div>
@@ -18,7 +18,7 @@
     </div>
   
     <!-- Repairs list -->
-    <div *ngFor="let repair of repairs" class="mb-8 p-6 bg-white rounded-lg shadow">
+    <div *ngFor="let repair of repairs" class="mb-8 p-6 bg-white  shadow">
       <div class="flex justify-between items-start">
         <div>
           <h3 class="text-xl font-semibold">
