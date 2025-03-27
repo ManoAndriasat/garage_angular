@@ -54,7 +54,5 @@ export class CarOnRepairCustomerComponent implements OnInit {
     return 'John Doe'; // Placeholder
   }
 
-  updateRepairStatus(repairId: string, reparationIndex: number, status: boolean): void {
-    console.log('Updating repair status:', { repairId, reparationIndex, status });
-  }
+
 }

@@ -41,30 +41,56 @@ export class AppointmentListCustomerComponent implements OnInit {
     });
   }
 
+  cancelAppointment(appointmentId: string): void {
+    if (confirm('Are you sure you want to cancel this appointment?')) {
+      this.customerService.cancelAppointment(appointmentId).subscribe({
+        next: () => {
+          const appointment = this.appointments.find(a => a._id === appointmentId);
+          if (appointment) {
+            appointment.status.user = false;
+          }
+        },
+        error: (err) => {
+          console.error('Error canceling appointment:', err);
+          this.error = 'Failed to cancel appointment';
+        }
+      });
+    }
+  }
+
+  validateAppointment(appointmentId: string): void {
+    this.customerService.validateAppointment(appointmentId).subscribe({
+      next: (updatedAppointment) => {
+        const index = this.appointments.findIndex(a => a._id === appointmentId);
+        if (index !== -1) {
+          this.appointments[index] = updatedAppointment;
+        }
+      },
+      error: (err) => {
+        console.error('Error validating appointment:', err);
+        this.error = 'Failed to validate appointment';
+      }
+    });
+  }
+
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString();
   }
 
   formatTime(timeString: string): string {
-    return new Date(timeString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(timeString).toLocaleString([], { 
+      day: '2-digit', 
+      month: 'short', 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
   }
-
+  
+  
   getStatusText(status: any): string {
     if (status.user && status.mechanic) return 'Confirmed';
-    if (!status.user) return 'Cancelled by you';
+    if (!status.user) return 'the mechanic reshedule the date and waiting for your confirmation';
     if (!status.mechanic) return 'Waiting for mechanic confirmation';
     return 'Pending';
-  }
-
-  getCarBrandModel(carId: string): string {
-    return 'Toyota Corolla'; 
-  }
-
-  getMechanicName(mechanicId: string): string {
-    return 'John Doe'; 
-  }
-
-  cancelAppointment(appointmentId: string): void {
-    console.log('Cancelling appointment:', appointmentId);
   }
 }

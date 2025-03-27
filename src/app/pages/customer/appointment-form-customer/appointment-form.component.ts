@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { CustomerService } from '../../../services/customer/customer.service';
+import { MecanoService } from '../../../services/mecano/mecano.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-form',
@@ -11,25 +13,56 @@ import { CustomerService } from '../../../services/customer/customer.service';
   templateUrl: './appointment-form.component.html',
   styleUrls: ['./appointment-form.component.css'],
 })
-export class AppointmentFormComponent {
+export class AppointmentFormComponent implements OnInit {
   formData = {
-    car_id: '',
-    mechanic_id: '',
+    car: null as any,
+    mechanic: null as any,
     date: '',
     start_time: '',
     end_time: '',
     localisation: '',
     problem: [{ material: '', description: '' }],
     status: {
-      mechanic: true,
+      mechanic: false,
       user: true
     }
   };
 
+  mechanics: any[] = [];
+  cars: any[] = [];
+
   constructor(
     private authService: AuthService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private mecanoService: MecanoService
   ) {}
+
+  ngOnInit() {
+    this.loadMechanics();
+    this.loadCars();
+  }
+
+  loadMechanics() {
+    this.mecanoService.getMechanics().subscribe({
+      next: (response) => {
+        this.mechanics = response;
+      },
+      error: (error) => {
+        console.error('Error fetching mechanics:', error);
+      }
+    });
+  }
+
+  loadCars() {
+    this.customerService.getAllCars().subscribe({
+      next: (response) => {
+        this.cars = response;
+      },
+      error: (error) => {
+        console.error('Error fetching cars:', error);
+      }
+    });
+  }
 
   addProblem() {
     this.formData.problem.push({ material: '', description: '' });
@@ -42,13 +75,19 @@ export class AppointmentFormComponent {
     dateObj.setHours(dateObj.getHours() + 1);
     this.formData.end_time = dateObj.toISOString();
 
-
     const user_id = this.authService.getId();
+
+    const selectedMechanic = {
+      _id: this.formData.mechanic._id,
+      firstname: this.formData.mechanic.firstname,
+      lastname: this.formData.mechanic.lastname,
+      contact: this.formData.mechanic.contact
+    }
     
     const appointmentData = {
       user_id,
-      car_id: this.formData.car_id,
-      mechanic_id: this.formData.mechanic_id,
+      car: this.formData.car,  // Send entire car object
+      mechanic: selectedMechanic,  // Send entire mechanic object
       date: this.formData.date,
       start_time: this.formData.start_time,
       end_time: this.formData.end_time,
@@ -56,8 +95,8 @@ export class AppointmentFormComponent {
       problem: this.formData.problem,
       status: this.formData.status
     };
+    
     console.log('Appointment Data:', appointmentData);
-
 
     this.customerService.createAppointment(appointmentData).subscribe({
       next: (response) => {

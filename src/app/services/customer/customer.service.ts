@@ -9,7 +9,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root'
 })
 export class CustomerService {
-  private apiUrl = 'https://garage-backend-lk3y.onrender.com/users';
+  private apiUrl = 'http://localhost:5000/users';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -62,19 +62,20 @@ export class CustomerService {
     return this.http.get(`${this.apiUrl}/repairs`, { headers });
   }
 
-  updateRepairStatus(repairId: string, itemIndex: number, status: boolean): Observable<any> {
+  cancelAppointment(appointmentId: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`,
       'Content-Type': 'application/json'
     });
-    const body = {
-      repairId,
-      itemIndex,
-      status
-    };
-    return this.http.patch(`${this.apiUrl}/status`, body, { headers });
+    return this.http.post(`${this.apiUrl}/cancel-appointment`, { appointmentId }, { headers });
+  }
+
+  validateAppointment(appointmentId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(`${this.apiUrl}/validate-appointment`, { appointmentId }, { headers });
   }
 }
-
-
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
-import { LoginMecanoService } from '../../../services/mecano/login-mecano.service';
+import { MecanoService } from '../../../services/mecano/mecano.service';
 
 @Component({
   selector: 'app-repair-manager',
@@ -25,7 +25,7 @@ export class RepairManagerComponent {
   };
 
   constructor(
-    private MechanicService: LoginMecanoService,
+    private MechanicService: MecanoService,
     private authService: AuthService
   ) {}
 

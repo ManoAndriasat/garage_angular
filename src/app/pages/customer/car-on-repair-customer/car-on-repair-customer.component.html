@@ -63,18 +63,6 @@
           {{ formatDate(item.start) }}<br>
           to {{ formatDate(item.end) }}
         </div>
-        <div class="col-span-2 flex gap-2">
-          <button (click)="updateRepairStatus(repair._id, i, true)"
-                  class="text-green-600 hover:text-green-800 text-xs"
-                  [disabled]="!item.status.user">
-            {{ item.status.user ? 'Approved' : 'Approve' }}
-          </button>
-          <button (click)="updateRepairStatus(repair._id, i, false)"
-                  class="text-red-600 hover:text-red-800 text-xs"
-                  [disabled]="!item.status.user">
-            {{ item.status.user ? 'Reject' : 'Rejected' }}
-          </button>
-        </div>
       </div>
     </div>
   </div>

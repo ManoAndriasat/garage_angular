@@ -24,7 +24,7 @@
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="text-xl font-semibold">
-                    {{ getCarBrandModel(appointment.car_id) }}
+                    {{ appointment.car.brand }} {{ appointment.car.model }} {{ appointment.car.year }}
                     <span class="text-sm font-normal text-gray-600">
                         ({{ formatDate(appointment.date) }})
                     </span>
@@ -33,7 +33,7 @@
                 <div class="mt-2">
                     <p class="text-gray-600">
                         <span class="font-medium">Mechanic:</span>
-                        {{ getMechanicName(appointment.mechanic_id) }}
+                        {{ appointment.mechanic.firstname }} {{ appointment.mechanic.lastname }}
                     </p>
                     <p class="text-gray-600">
                         <span class="font-medium">localisation:</span>
@@ -47,8 +47,17 @@
             </div>
 
             <div>
-                <button (click)="cancelAppointment(appointment._id)" class="text-red-600 hover:text-red-800">
-                    Cancel
+                <button (click)="cancelAppointment(appointment._id)"
+                        class="text-red-600 hover:text-red-800">
+                    Cancel Appointment
+                </button>
+            </div>
+
+            <div class="flex space-x-2">
+                <button *ngIf="appointment.status.user == false" 
+                        (click)="validateAppointment(appointment._id)"
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                    {{ appointment.status.mechanic ? 'Revalidate' : 'Validate' }}
                 </button>
             </div>
         </div>

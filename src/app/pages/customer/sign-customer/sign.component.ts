@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.css']
 })
+
 export class SignComponent{
   user = {
     firstname: '',

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoginMecanoService } from './login-mecano.service';
+import { MecanoService } from './mecano.service';
 
-describe('LoginMecanoService', () => {
-  let service: LoginMecanoService;
+describe('MecanoService', () => {
+  let service: MecanoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(LoginMecanoService);
+    service = TestBed.inject(MecanoService);
   });
 
   it('should be created', () => {

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { LoginMecanoService } from '../../../services/mecano/login-mecano.service';
+import { MecanoService } from '../../../services/mecano/mecano.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -16,7 +16,7 @@ export class LoginMecanoComponent {
   password: string = '';
   message: string = '';
 
-  constructor(private authService: AuthService,private MecanoService: LoginMecanoService, private router: Router) {}
+  constructor(private authService: AuthService,private MecanoService: MecanoService, private router: Router) {}
 
   loginUser() {
     console.log('Logging in with:', this.contact, this.password);

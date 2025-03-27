@@ -6,18 +6,33 @@
 
             <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div class="grid gap-4 gap-y-2 text-sm grid-cols-12">
+                    <!-- Car Selection -->
                     <div class="col-span-12">
-                        <label for="car_id">Car ID</label>
-                        <input type="text" name="car_id" id="car_id"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.car_id" required />
+                        <label for="car">Select Car</label>
+                        <select name="car" id="car"
+                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            [(ngModel)]="formData.car" required>
+                            <option [ngValue]="null">Select a car</option>
+                            <option *ngFor="let car of cars" [ngValue]="car">
+                                {{ car.brand }} {{ car.model }} ({{ car.year }}) - {{ car.vin }}
+                            </option>
+                        </select>
                     </div>
 
+                    <!-- Mechanic Selection -->
                     <div class="col-span-12">
-                        <label for="mechanic_id">Mechanic ID</label>
-                        <input type="text" name="mechanic_id" id="mechanic_id"
-                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.mechanic_id" required />
+                        <label for="mechanic">Select Mechanic</label>
+                        <select name="mechanic" id="mechanic"
+                            class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                            [(ngModel)]="formData.mechanic" required>
+                            <option [ngValue]="null">Select a mechanic</option>
+                            <option *ngFor="let mechanic of mechanics" [ngValue]="mechanic">
+                                {{ mechanic.firstname }} {{ mechanic.lastname }} - {{ mechanic.speciality.join(', ') }}
+                            </option>
+                        </select>
                     </div>
 
+                    <!-- Date and Time -->
                     <div class="col-span-12">
                         <label for="date">Date and Time</label>
                         <input type="datetime-local" name="date" id="date"
@@ -25,8 +40,9 @@
                             required />
                     </div>
 
+                    <!-- Location -->
                     <div class="col-span-12">
-                        <label for="localisation">localisation</label>
+                        <label for="localisation">Location</label>
                         <input type="text" name="localisation" id="localisation"
                             class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" [(ngModel)]="formData.localisation"
                             placeholder="Enter location" required />

@@ -43,30 +43,9 @@ export class CarFormDialogComponent {
 
   registerCar() {
     this.carData.owner = this.authService.getId() ?? 'defaultOwnerId';
-    console.log('Cars Data:', this.carData);
-
-    this.userService.registerCar(this.carData).subscribe({
-      next: (response) => {
-        this.message = 'Car registered successfully!';
-        console.log('Success:', response);
-        this.dialogRef.close();
-      },
-      error: (error) => {
-        this.message = 'Registration failed: ' + (error.error?.msg || 'Unknown error');
-        console.error('Error:', error);
-      },
-    });
-    this.dialogRef.close(this.carData);
-  }
-
-  registerCarByVin() {
-    this.carData.owner = this.authService.getId() ?? 'defaultOwnerId';
-    this.carData.brand = this.vinData.carDetails.Make;
-    this.carData.model = this.vinData.carDetails.Model;
-    this.carData.year = this.vinData.carDetails.ModelYear;
     this.carData.vin = this.vinData.vin;
-
     console.log('Cars Data:', this.carData);
+
     this.userService.registerCar(this.carData).subscribe({
       next: (response) => {
         this.message = 'Car registered successfully!';
@@ -80,6 +59,7 @@ export class CarFormDialogComponent {
     });
     this.dialogRef.close(this.carData);
   }
+
 
   fetchCarDetailsByVin(vin: string): Observable<any> {
     const vinDecodedUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;

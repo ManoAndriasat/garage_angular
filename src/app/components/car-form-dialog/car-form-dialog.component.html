@@ -1,21 +1,23 @@
 <div>
-    <div class="p-3 bg-black"></div>
+    <div class="p-2 bg-black flex justify-center text-white">
+        <p>register your car</p>
+    </div>
     <div class="p-8 bg-white shadow-lg">
         <div>
-            <p class="text-lg font-semibold mb-4 text-gray-700">Fetch Car Details by VIN</p>
+            <p class="block mb-2 text-sm font-medium text-gray-700">VIN (Vehicle Identification Number) <span class="text-[10px]">optional</span></p>
             <div class="flex gap-4 mb-6">
                 <input type="text" name="vin" id="vin" [(ngModel)]="vinData.vin"
                     class="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter VIN" required value="4T1BF1FK7HU579396">
                 <button (click)="handleVinSubmit()"
-                    class="px-6 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition duration-200">
+                    class="px-6 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-200">
                     Check VIN
                 </button>
             </div>
 
             <!-- VIN Details Container -->
             <div *ngIf="vinData.carDetails" class="mt-6">
-                <p class="text-lg font-semibold mb-4 text-gray-800">VIN Details:</p>
+                <p class="mb-4 text-gray-800">VIN Details:</p>
                 <div class="h-64 overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div class="space-y-3">
                         <div *ngFor="let detail of getCarDetailsAsArray(vinData.carDetails)"
@@ -25,27 +27,23 @@
                         </div>
                     </div>
                 </div>
-                <button (click)="registerCarByVin()"
-                    class="w-full p-2 mt-4 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-200">
-                    Register Car from VIN
-                </button>
             </div>
             <ng-template #noDetails>
                 <p class="text-red-500 text-sm">No details found for this VIN. You can still register the car manually.
                 </p>
             </ng-template>
         </div>
+        <hr>
 
-        <!-- Separator -->
+        <!-- Separator
         <div class="flex items-center my-6">
             <hr class="flex-1 border-gray-300">
             <span class="mx-4 text-gray-500">OR</span>
             <hr class="flex-1 border-gray-300">
-        </div>
+        </div> -->
 
         <!-- Manual Registration Form -->
         <div>
-            <p class="text-lg font-semibold mb-4 text-gray-700">Register Car Manually</p>
             <form (ngSubmit)="registerCar()">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div>
