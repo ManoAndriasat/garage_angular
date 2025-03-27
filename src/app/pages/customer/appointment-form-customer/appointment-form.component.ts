@@ -5,6 +5,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { CustomerService } from '../../../services/customer/customer.service';
 import { MecanoService } from '../../../services/mecano/mecano.service';
 import { first } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-appointment-form',
@@ -34,7 +35,8 @@ export class AppointmentFormComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private customerService: CustomerService,
-    private mecanoService: MecanoService
+    private mecanoService: MecanoService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -101,6 +103,7 @@ export class AppointmentFormComponent implements OnInit {
     this.customerService.createAppointment(appointmentData).subscribe({
       next: (response) => {
         console.log('Appointment created successfully:', response);
+        this.router.navigate(['/appointment-list-customer']);
       },
       error: (error) => {
         console.error('Error creating appointment:', error);

@@ -18,9 +18,9 @@ import { map } from 'rxjs/operators';
 })
 export class CarRegisterComponent implements OnInit {
   cars: any[] = [];
-  vinDetailsMap: { [vin: string]: any } = {}; // Track VIN details for each car
-  loadingVins: { [vin: string]: boolean } = {}; // Track loading state per VIN
-  vinErrors: { [vin: string]: string | null } = {}; // Track errors per VIN
+  vinDetailsMap: { [vin: string]: any } = {};
+  loadingVins: { [vin: string]: boolean } = {};
+  vinErrors: { [vin: string]: string | null } = {};
 
   constructor(
     private dialog: MatDialog,

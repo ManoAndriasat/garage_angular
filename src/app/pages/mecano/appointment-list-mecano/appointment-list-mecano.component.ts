@@ -4,6 +4,10 @@ import { MecanoService } from '../../../services/mecano/mecano.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { FormsModule } from '@angular/forms';
 
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-appointment-list-mecano',
   standalone: true,
@@ -16,6 +20,10 @@ export class AppointmentListMecanoComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
+  vinDetailsMap: { [vin: string]: any } = {};
+  loadingVins: { [vin: string]: boolean } = {};
+  vinErrors: { [vin: string]: string | null } = {};
+
   // Reschedule modal variables
   showRescheduleModal = false;
   rescheduleData = {
@@ -25,7 +33,8 @@ export class AppointmentListMecanoComponent implements OnInit {
 
   constructor(
     private mecanoService: MecanoService,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient,
   ) { }
 
   ngOnInit(): void {
@@ -53,6 +62,7 @@ export class AppointmentListMecanoComponent implements OnInit {
     this.mecanoService.validateAppointment(appointmentId).subscribe({
       next: () => {
         this.appointments = this.appointments.filter(a => a._id !== appointmentId);
+        this.loadAppointments();
       },
       error: (err) => {
         console.error('Error validating appointment:', err);
@@ -66,6 +76,7 @@ export class AppointmentListMecanoComponent implements OnInit {
       this.mecanoService.deleteAppointment(appointmentId).subscribe({
         next: () => {
           this.appointments = this.appointments.filter(a => a._id !== appointmentId);
+          this.loadAppointments();
         },
         error: (err) => {
           console.error('Error deleting appointment:', err);
@@ -97,6 +108,7 @@ export class AppointmentListMecanoComponent implements OnInit {
           this.appointments[index] = updatedAppointment;
         }
         this.showRescheduleModal = false;
+        this.loadAppointments();
       },
       error: (err) => {
         console.error('Error rescheduling appointment:', err);
@@ -129,5 +141,55 @@ export class AppointmentListMecanoComponent implements OnInit {
     const date = new Date(dateTimeString);
     const isoString = date.toISOString();
     return isoString.substring(0, isoString.length - 8);
+  }
+
+  fetchCarDetailsByVin(vin: string): Observable<any> {
+    const vinDecodedUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;
+    return this.http.get(vinDecodedUrl).pipe(
+      map((response: any) => {
+        if (response.Results && response.Results.length > 0) {
+          const filteredResult = Object.fromEntries(
+            Object.entries(response.Results[0]).filter(([key, value]) => value !== "")
+          );
+          response.Results[0] = filteredResult;
+        }
+        return response;
+      })
+    );
+  }
+
+  getCarDetailsAsArray(carDetails: any): { label: string, value: string }[] {
+    return Object.keys(carDetails)
+      .filter(key => key !== 'VIN')
+      .map(key => ({
+        label: key.split(/(?=[A-Z])/).join(' ').toUpperCase(), 
+        value: carDetails[key]
+      }));
+  }
+
+  toggleVinDetails(vin: string) {
+    if (this.vinDetailsMap[vin]) {
+      this.vinDetailsMap[vin] = null;
+      this.vinErrors[vin] = null;
+    } else {
+      this.loadingVins[vin] = true;
+      this.vinErrors[vin] = null;
+      
+      this.fetchCarDetailsByVin(vin).subscribe(
+        (response: any) => {
+          if (response.Results && response.Results.length > 0 && Object.keys(response.Results[0]).length > 1) {
+            this.vinDetailsMap[vin] = response.Results[0];
+          } else {
+            this.vinErrors[vin] = 'No details found for this VIN';
+          }
+          this.loadingVins[vin] = false;
+        },
+        (error) => {
+          console.error('Error fetching VIN details:', error);
+          this.vinErrors[vin] = 'Error fetching VIN details';
+          this.loadingVins[vin] = false;
+        }
+      );
+    }
   }
 }

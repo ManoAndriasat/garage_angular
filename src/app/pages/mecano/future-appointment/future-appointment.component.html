@@ -1,1 +1,143 @@
-<p>future-appointment works!</p>
+<div class="m-10">
+    <div class="mb-3 p-6 rounded-lg shadow text-white bg-blue-900">
+        Waiting Appointments
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="text-center py-10">
+        <p>Loading appointments...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ error }}
+        <button (click)="loadAppointments()" class="ml-4 text-blue-600">Retry</button>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && !error && appointments.length === 0" class="text-center py-10">
+        <p>No waiting appointments found.</p>
+    </div>
+
+    <!-- Appointments list -->
+    <div *ngFor="let appointment of appointments" class="mb-8 p-6 bg-white rounded-lg shadow">
+        <div class="flex justify-between items-start">
+            <div>
+                <h3 class="text-xl font-semibold">
+                    {{ appointment.car.brand }} {{ appointment.car.model }} {{ appointment.car.year }}
+                    <span class="text-sm font-normal text-gray-600">
+                        ({{ formatDate(appointment.date) }})
+                    </span>
+                </h3>
+
+                <div class="mt-2">
+                    <p class="text-gray-600">
+                        <span class="font-medium">Customer:</span>
+                        {{ appointment.user_id }}
+                    </p>
+                    <p class="text-gray-600">
+                        <span class="font-medium">Location:</span>
+                        {{ appointment.localisation }}
+                    </p>
+                    <p class="text-gray-600">
+                        <span class="font-medium">Time:</span>
+                        {{ formatTime(appointment.start_time) }} - {{ formatTime(appointment.end_time) }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex space-x-2">
+                <button (click)="openRescheduleModal(appointment)"
+                    class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                    Reschedule
+                </button>
+                <button (click)="deleteAppointment(appointment._id)"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                    Reject
+                </button>
+            </div>
+        </div>
+
+        
+        <div class="mt-2">
+            <button (click)="toggleVinDetails(appointment.car.vin)"
+                class="px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+                [disabled]="loadingVins[appointment.car.vin]">
+                <span *ngIf="!loadingVins[appointment.car.vin]">
+                    {{ vinDetailsMap[appointment.car.vin] ? 'Hide VIN Details' : 'Show VIN Details' }}
+                </span>
+                <span *ngIf="loadingVins[appointment.car.vin]" class="flex items-center">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-800" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    Loading...
+                </span>
+            </button>
+
+            <!-- VIN Details Section -->
+            <div *ngIf="vinDetailsMap[appointment.car.vin]" class="mt-3 p-3 bg-gray-50 rounded-lg">
+                <h4 class="font-medium text-gray-800 mb-2">VIN Details</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                    <div *ngFor="let detail of getCarDetailsAsArray(vinDetailsMap[appointment.car.vin])"
+                        class="bg-white p-2 rounded shadow-xs">
+                        <p class="text-xs font-medium text-gray-600">{{ detail.label }}</p>
+                        <p class="text-sm text-gray-800">{{ detail.value }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="vinErrors[appointment.car.vin]" class="mt-2 text-xs text-red-500">
+                {{ vinErrors[appointment.car.vin] }}
+            </div>
+        </div>
+
+        <hr class="my-2">
+
+        <div class="mt-4">
+            <h4 class="font-medium mb-2">Problems</h4>
+            <div class="grid grid-cols-12 gap-2 text-sm border-b border-gray-200 pb-1 mb-1 font-medium">
+                <div class="col-span-3">Type</div>
+                <div class="col-span-9">Description</div>
+            </div>
+
+
+            <div *ngFor="let problem of appointment.problem"
+                class="grid grid-cols-12 gap-2 text-sm py-1 border-b border-gray-100">
+                <div class="col-span-3 font-medium text-gray-900 truncate">
+                    {{ problem.material || 'General' }}
+                </div>
+                <div class="col-span-9 text-gray-600 truncate">
+                    {{ problem.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reschedule Modal -->
+    <div *ngIf="showRescheduleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Reschedule Appointment</h3>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">New Start Time</label>
+                <input type="datetime-local" [(ngModel)]="rescheduleData.newStartTime" class="w-full p-2 border rounded"
+                    [value]="rescheduleData.newStartTime | date:'yyyy-MM-ddTHH:mm'">
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <button (click)="showRescheduleModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                    Cancel
+                </button>
+                <button (click)="rescheduleAppointment()"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

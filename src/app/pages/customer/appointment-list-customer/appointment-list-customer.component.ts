@@ -49,6 +49,7 @@ export class AppointmentListCustomerComponent implements OnInit {
           if (appointment) {
             appointment.status.user = false;
           }
+          this.loadAppointments();
         },
         error: (err) => {
           console.error('Error canceling appointment:', err);
@@ -65,6 +66,7 @@ export class AppointmentListCustomerComponent implements OnInit {
         if (index !== -1) {
           this.appointments[index] = updatedAppointment;
         }
+        this.loadAppointments();
       },
       error: (err) => {
         console.error('Error validating appointment:', err);
@@ -72,6 +74,7 @@ export class AppointmentListCustomerComponent implements OnInit {
       }
     });
   }
+
 
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString();
