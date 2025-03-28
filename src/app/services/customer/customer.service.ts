@@ -77,5 +77,25 @@ export class CustomerService {
     });
     return this.http.post(`${this.apiUrl}/validate-appointment`, { appointmentId }, { headers });
   }
+
+  acceptReparation(repairId: string, reparationIndex: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    
+    return this.http.post(`${this.apiUrl}/accept-reparation`, 
+      { repair_id: repairId, reparation_index: reparationIndex }, 
+      { headers }
+    );
+  }
+
+  getOngoingRepairs(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(`${this.apiUrl}/ongoing-repairs`, { headers });
+  }  
 }
 

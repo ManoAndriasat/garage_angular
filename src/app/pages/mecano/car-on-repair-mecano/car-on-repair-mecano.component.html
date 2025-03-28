@@ -1,33 +1,284 @@
-<div>
-    <div class="m-10">
-        Car on Repair
+<div class="min-h-screen bg-gray-50 p-6">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Current Vehicle Repairs</h1>
+        <p class="text-gray-600">Manage ongoing repairs</p>
     </div>
 
-    <div class="px-10 py-2 w-full">
-        <h1 class="text-2xl">Brand - Model</h1>
-        <hr>
-        <p>Date</p>
-        <div class="bg-gray-200 p-2 my-2 -sm">
-            <div class="information flex gap-5">
-                <p><strong>probleme</strong></p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-            </div>
-        </div>
-        <div class="bg-gray-200 p-2 my-2 -sm">
-            <div class="information flex gap-5">
-                <p><strong>probleme</strong></p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-            </div>
-        </div>
-        <div >
-            <form action="#" method="post" class="grid grid-cols-12 border border-gray-200 -sm gap-5 p-2">
-                <input class="col-span-3 border border-gray-500 -sm p-2" type="text" placeholder="probleme">
-                <input class="col-span-8 border border-gray-500 -sm p-2" type="text" placeholder="details">
-                <input class="col-span-1 border border-gray-500 -sm p-2" type="submit" value="propose">
-            </form>
-        </div>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
 
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-red-700">{{ error }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repairs List -->
+    <div *ngIf="repairs.length > 0 && !isLoading" class="space-y-6">
+        <div *ngFor="let repair of repairs" class="bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Vehicle Info -->
+            <div class="p-8 border-b border-gray-200">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800">
+                            {{ repair.car?.brand }} - {{ repair.car?.model }}
+                            <span class="text-lg font-normal text-gray-600 ml-2">
+                                ({{ repair.car?.year }})
+                            </span>
+                        </h2>
+                        <div class="mt-4 space-y-2">
+                            <p class="text-gray-600">
+                                <span class="font-medium">Owner:</span>
+                                {{ repair.owner?.firstname }} {{ repair.owner?.lastname }}
+                            </p>
+                            <p class="text-gray-600">
+                                <span class="font-medium">Contact:</span>
+                                {{ repair.owner?.contact }}
+                            </p>
+                            <p class="text-gray-500 text-sm mt-2">
+                                Created: {{ formatDate(repair.createdAt) }}
+                            </p>
+                        </div>
+                    </div>
+                    <button (click)="openAddModal(repair._id)"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                        Add Problem
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reparations List -->
+            <div class="divide-y divide-gray-200 px-8">
+                <div *ngFor="let rep of repair.reparation; let i = index"
+                    class="py-6 hover:bg-gray-50 transition-colors">
+                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                        <!-- Problem Info -->
+                        <div class="flex items-center gap-4 min-w-[200px]">
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800">{{ rep.type }}</h3>
+                                <div class="mt-1 text-sm text-gray-500">
+                                    {{ formatDate(rep.start) }} → {{ formatDate(rep.end) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <button (click)="openEditModal(i)" class="ml-2 text-blue-600 hover:text-blue-800 text-sm">
+                            Edit
+                          </button>
+
+                        <!-- Description and Material -->
+                        <div class="flex-1 min-w-[300px]">
+                            <p class="text-gray-600">{{ rep.description }}</p>
+                            <div *ngIf="rep.material" class="mt-2 text-sm text-gray-500">
+                                <span class="font-medium">Material:</span> {{ rep.material }}
+                            </div>
+                            <div class="mt-2 text-sm">
+                                <span class="font-medium">Price:</span> {{ rep.price | currency }}
+                            </div>
+                        </div>
+
+                        <!-- Status Indicators -->
+                        <div class="flex flex-col gap-2 min-w-[150px]">
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium mr-2">Mechanic:</span>
+                                <span [ngClass]="{
+                                    'text-green-600': rep.status.mechanic,
+                                    'text-red-600': !rep.status.mechanic
+                                }">
+                                    {{ rep.status.mechanic ? 'Approved' : 'Pending' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium mr-2">Client:</span>
+                                <span [ngClass]="{
+                                    'text-green-600': rep.status.user,
+                                    'text-red-600': !rep.status.user,
+                                    'text-yellow-600': rep.status.user === null
+                                }">
+                                    {{ rep.status.user === true ? 'Approved' :
+                                    rep.status.user === false ? 'Rejected' : 'Pending' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="repairs.length === 0 && !isLoading && !error" class="text-center py-16">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">No ongoing repairs</h3>
+        <p class="mt-1 text-sm text-gray-500">You currently don't have any vehicles in repair.</p>
+    </div>
+
+    <!-- Add New Reparation Modal -->
+    <div *ngIf="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-gray-800">Add New Problem</h3>
+                    <button (click)="showAddModal = false; selectedRepairId = null;"
+                        class="text-gray-400 hover:text-gray-500">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form (ngSubmit)="addReparation()" class="space-y-4">
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Problem Type</label>
+                        <input type="text" id="type" [(ngModel)]="newReparation.type" name="type" required
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                    </div>
+
+                    <div>
+                        <label for="description"
+                            class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea id="description" [(ngModel)]="newReparation.description" name="description" rows="3"
+                            required
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="start" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <input type="datetime-local" id="start" [(ngModel)]="newReparation.start" name="start"
+                                required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                        </div>
+                        <div>
+                            <label for="end" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            <input type="datetime-local" id="end" [(ngModel)]="newReparation.end" name="end" required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="material" class="block text-sm font-medium text-gray-700 mb-1">Material
+                                (optional)</label>
+                            <input type="text" id="material" [(ngModel)]="newReparation.material" name="material"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                        </div>
+                        <div>
+                            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                            <input type="number" id="price" [(ngModel)]="newReparation.price" name="price" required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" (click)="showAddModal = false; selectedRepairId = null;"
+                            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" [disabled]="isSubmitting"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50">
+                            <span *ngIf="isSubmitting" class="animate-spin mr-2">↻</span>
+                            Add Problem
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Edit Modal -->
+    <div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-gray-800">Edit Reparation</h3>
+                    <button (click)="showEditModal = false; selectedReparationIndex = null;"
+                        class="text-gray-400 hover:text-gray-500">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form (ngSubmit)="updateReparation()" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                        <input type="text" [(ngModel)]="reparationUpdate.type" name="type" required
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea [(ngModel)]="reparationUpdate.description" name="description" rows="3" required
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            <input type="datetime-local" [(ngModel)]="reparationUpdate.start" name="start" required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            <input type="datetime-local" [(ngModel)]="reparationUpdate.end" name="end" required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Material</label>
+                        <input type="text" [(ngModel)]="reparationUpdate.material" name="material"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                        <input type="number" [(ngModel)]="reparationUpdate.price" name="price" required
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" (click)="showEditModal = false; selectedReparationIndex = null;"
+                            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" [disabled]="reparationUpdate.isSubmitting"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50">
+                            <span *ngIf="reparationUpdate.isSubmitting" class="animate-spin mr-2">↻</span>
+                            Update Reparation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>

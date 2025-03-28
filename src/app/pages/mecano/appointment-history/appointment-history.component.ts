@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MecanoService } from '../../../services/mecano/mecano.service';
 import { FormsModule } from '@angular/forms';
-import { VinDetailsComponent } from '../vin-details/vin-details.component';
 
 @Component({
   selector: 'app-appointment-history',
   standalone: true,
-  imports: [CommonModule, FormsModule, VinDetailsComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './appointment-history.component.html',
   styleUrl: './appointment-history.component.css'
 })
@@ -15,13 +14,44 @@ export class AppointmentHistoryComponent implements OnInit {
   appointments: any[] = [];
   isLoading = true;
   error: string | null = null;
+  isCreatingRepair = false;
+  errorMessage: string | null = null;
 
+  
   constructor(
     private mecanoService: MecanoService,
   ) { }
 
   ngOnInit(): void {
     this.loadAppointments();
+  }
+
+  beginRepair(appointment: any): void {
+    this.isCreatingRepair = true;
+    const repairData = {
+      appointment_id: appointment._id,
+      owner: appointment.user,
+      car: appointment.car,
+      mechanic: appointment.mechanic,
+      reparation: []
+    };
+    console.log('Repair data:', repairData);
+
+    this.mecanoService.createRepair(repairData).subscribe({
+      next: (response) => {
+        this.isCreatingRepair = false;
+        this.loadAppointments();
+      },
+      error: (err) => {
+        this.isCreatingRepair = false;
+        this.handleApiError(err);
+      }
+    });
+  }
+
+  private handleApiError(error: any) {
+    this.errorMessage = (error.error?.message || error.message);
+    setTimeout(() => this.errorMessage = null, 5000);
   }
 
   loadAppointments(): void {
@@ -46,11 +76,11 @@ export class AppointmentHistoryComponent implements OnInit {
   }
 
   formatTime(timeString: string): string {
-    return new Date(timeString).toLocaleString([], { 
-      day: '2-digit', 
-      month: 'short', 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timeString).toLocaleString([], {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   }
 }

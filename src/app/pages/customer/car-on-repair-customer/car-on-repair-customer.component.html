@@ -1,68 +1,138 @@
-<div class="m-10">
-    <h2 class="text-2xl font-bold mb-6">Cars Under Repair</h2>
-  
-    <!-- Loading state -->
-    <div *ngIf="isLoading" class="text-center py-10">
-      <p>Loading repair information...</p>
+<div class="min-h-screen bg-gray-50 p-6">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">My Vehicle Repairs</h1>
+        <p class="text-gray-600">View and manage your ongoing repairs</p>
     </div>
-  
-    <!-- Error state -->
-    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3  mb-4">
-      {{ error }}
-      <button (click)="loadRepairs()" class="ml-4 text-blue-600">Retry</button>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
     </div>
-  
-    <!-- Empty state -->
-    <div *ngIf="!isLoading && !error && repairs.length === 0" class="text-center py-10">
-      <p>No cars currently under repair.</p>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-red-700">{{ error }}</p>
+            </div>
+        </div>
     </div>
-  
-    <!-- Repairs list -->
-    <div *ngFor="let repair of repairs" class="mb-8 p-6 bg-white  shadow">
-      <div class="flex justify-between items-start">
-        <div>
-          <h3 class="text-xl font-semibold">
-            {{ getCarBrandModel(repair.car_id) }}
-            <span class="text-sm font-normal text-gray-600">
-              (Repair ID: {{ repair._id }})
-            </span>
-          </h3>
-          
-          <div class="mt-2">
-            <p class="text-gray-600">
-              <span class="font-medium">Mechanic:</span> 
-              {{ getMechanicName(repair.mechanic_id) }}
-            </p>
-          </div>
+
+    <!-- Repair Content -->
+    <div *ngIf="repairs.length > 0 && !isLoading">
+        <div *ngFor="let repair of repairs" class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+
+            <div class="p-8 border-b border-gray-200">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800">
+                            {{ repair.car?.brand }} - {{ repair.car?.model }}
+                            <span class="text-lg font-normal text-gray-600 ml-2">
+                                ({{ repair.car?.year }})
+                            </span>
+                        </h2>
+                        <div class="mt-4 space-y-2">
+                            <p class="text-gray-600">
+                                <span class="font-medium">Mechanic:</span>
+                                {{ repair.mechanic?.firstname }} {{ repair.mechanic?.lastname }}
+                            </p>
+                            <p class="text-gray-600">
+                                <span class="font-medium">Contact:</span>
+                                {{ repair.mechanic?.contact }}
+                            </p>
+                            <p class="text-gray-500 text-sm mt-2">
+                                Created: {{ formatDate(repair.createdAt) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reparations List -->
+            <div class="divide-y divide-gray-200 px-8">
+                <div *ngFor="let rep of repair.reparation; let i = index"
+                    class="py-6 hover:bg-gray-50 transition-colors">
+                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                        <!-- Problem Info -->
+                        <div class="flex items-center gap-4 min-w-[200px]">
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-gray-800">{{ rep.type }}</h3>
+                                <div class="mt-1 text-sm text-gray-500">
+                                    {{ formatDate(rep.start) }} → {{ formatDate(rep.end) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description and Material -->
+                        <div class="flex-1 min-w-[300px]">
+                            <p class="text-gray-600">{{ rep.description }}</p>
+                            <div *ngIf="rep.material" class="mt-2 text-sm text-gray-500">
+                                <span class="font-medium">Material:</span> {{ rep.material }}
+                                <span class="font-medium">Price:</span> {{ rep.price }}
+                            </div>
+                        </div>
+
+                        <!-- Status and Actions -->
+                        <div class="flex flex-col gap-3 min-w-[200px]">
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium mr-2">Mechanic:</span>
+                                <span [ngClass]="{
+                              'text-green-600': rep.status.mechanic,
+                              'text-red-600': !rep.status.mechanic
+                          }">
+                                    {{ rep.status.mechanic ? 'Approved' : 'Pending' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium mr-2">Your Status:</span>
+                                <span [ngClass]="{
+                              'text-green-600': rep.status.user,
+                              'text-red-600': rep.status.user === false,
+                              'text-yellow-600': rep.status.user === undefined || rep.status.user === null
+                          }">
+                                    {{ rep.status.user === true ? 'Approved' :
+                                    rep.status.user === false ? 'Rejected' : 'Pending' }}
+                                </span>
+                            </div>
+                            <div *ngIf="rep.status.mechanic && (rep.status.user === false || rep.status.user === null)"
+                                class="flex gap-2 mt-2">
+                                <button (click)="acceptReparation(repair._id, i)"
+                                    class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700">
+                                    Accept
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-  
-      <hr class="my-4">
-  
-      <h4 class="font-medium mb-3">Repair Items:</h4>
-      
-      <div class="grid grid-cols-12 gap-2 text-sm border-b border-gray-200 pb-2 mb-2 font-medium">
-        <div class="col-span-4">Type</div>
-        <div class="col-span-4">Description</div>
-        <div class="col-span-2">Period</div>
-        <div class="col-span-2">Actions</div>
-      </div>
-  
-      <div *ngFor="let item of repair.reparation; let i = index" 
-           class="grid grid-cols-12 gap-2 text-sm py-2 border-b border-gray-100 items-center">
-        <div class="col-span-4 font-medium text-gray-900">
-          {{ item.type }}
-          <span *ngIf="item.material" class="block text-xs text-gray-500">
-            ({{ item.material }})
-          </span>
-        </div>
-        <div class="col-span-4 text-gray-600">
-          {{ item.description }}
-        </div>
-        <div class="col-span-2 text-gray-500 text-xs">
-          {{ formatDate(item.start) }}<br>
-          to {{ formatDate(item.end) }}
-        </div>
-      </div>
+
     </div>
-  </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!repairs && !isLoading && !error" class="text-center py-16">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">No ongoing repairs</h3>
+        <p class="mt-1 text-sm text-gray-500">You currently don't have any vehicles in repair.</p>
+    </div>
+</div>
