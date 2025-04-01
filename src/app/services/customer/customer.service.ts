@@ -9,7 +9,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root'
 })
 export class CustomerService {
-  private apiUrl = 'http://localhost:5000/users';
+  private apiUrl = 'https://mygarage-fujn.onrender.com/users';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
