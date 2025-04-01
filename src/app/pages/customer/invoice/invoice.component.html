@@ -1,0 +1,47 @@
+<div class="invoice-container">
+    <h2>My Invoices</h2>
+  
+    <!-- Filter by Car -->
+    <div class="filter-section" *ngIf="cars.length > 0">
+      <label for="carFilter">Filter by Car:</label>
+      <select id="carFilter" [(ngModel)]="selectedCar" (change)="onCarFilterChange()">
+        <option [ngValue]="null">All Cars</option>
+        <option *ngFor="let car of cars" [value]="car._id">
+          {{ car.brand }} {{ car.model }} ({{ car.year }})
+        </option>
+      </select>
+    </div>
+  
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading">Loading invoices...</div>
+  
+    <!-- Error Message -->
+    <div *ngIf="error" class="error">{{ error }}</div>
+  
+    <!-- Invoices List -->
+    <div *ngIf="!isLoading && invoices.length > 0" class="invoice-list">
+      <div *ngFor="let invoice of invoices" class="invoice-card">
+        <div class="invoice-header">
+          <h3>Invoice #{{ invoice._id | slice:0:8 }}</h3>
+          <span class="date">{{ invoice.date | date:'mediumDate' }}</span>
+        </div>
+        
+        <div class="invoice-details">
+          <p><strong>Car:</strong> {{ invoice.car.brand }} {{ invoice.car.model }}</p>
+          <p><strong>Total:</strong> ${{ invoice.total | number:'1.2-2' }}</p>
+          <p><strong>Reparations:</strong> {{ invoice.reparation.length }}</p>
+        </div>
+  
+        <button 
+          (click)="downloadInvoice(invoice._id)"
+          class="download-btn">
+          Download PDF
+        </button>
+      </div>
+    </div>
+  
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && invoices.length === 0" class="empty-state">
+      No invoices found
+    </div>
+  </div>

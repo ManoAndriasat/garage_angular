@@ -123,8 +123,6 @@ export class CarOnRepairMecanoComponent implements OnInit {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
 
-
-
   openEditModal(index: number): void {
     this.selectedReparationIndex = index;
     const rep = this.repairs[0].reparation[index];
@@ -176,5 +174,31 @@ export class CarOnRepairMecanoComponent implements OnInit {
         this.reparationUpdate.isSubmitting = false;
       }
     });
+  }
+
+  finishAsMechanic(repairId: string): void {
+    if (!repairId) return;
+  
+    this.isSubmitting = true;
+    this.error = null;
+  
+    this.mecanoService.finishAsMechanic(repairId).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        const index = this.repairs.findIndex(r => r._id === repairId);
+        if (index !== -1) {
+          this.repairs[index] = response;
+        }
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.error = err.error?.message || 'Failed to mark as finished';
+        console.error(err);
+      }
+    });
+  }
+
+  isWaitingForCustomer(repair: any): boolean {
+    return repair.isfinished?.mechanic && !repair.isfinished?.user;
   }
 }

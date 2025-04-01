@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gray-50 p-6">
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Current Vehicle Repairs</h1>
+    <div class="mb-5 bg-white rounded-[5px] shadow-md py-2 px-4">
+        <p class="text-gray-800">Vehicle Repairs</p>
         <p class="text-gray-600">Manage ongoing repairs</p>
     </div>
 
@@ -28,7 +28,7 @@
 
     <!-- Repairs List -->
     <div *ngIf="repairs.length > 0 && !isLoading" class="space-y-6">
-        <div *ngFor="let repair of repairs" class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div *ngFor="let repair of repairs" class="bg-white rounded-[5px] shadow-md overflow-hidden">
             <!-- Vehicle Info -->
             <div class="p-8 border-b border-gray-200">
                 <div class="flex justify-between items-start">
@@ -48,15 +48,21 @@
                                 <span class="font-medium">Contact:</span>
                                 {{ repair.owner?.contact }}
                             </p>
-                            <p class="text-gray-500 text-sm mt-2">
-                                Created: {{ formatDate(repair.createdAt) }}
-                            </p>
                         </div>
                     </div>
                     <button (click)="openAddModal(repair._id)"
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-                        Add Problem
+                        new reparation
                     </button>
+
+                    <button *ngIf="!repair.isfinished?.mechanic && !repair.isfinished?.user"
+                        (click)="finishAsMechanic(repair._id)" [disabled]="isSubmitting" class="btn btn-primary">
+                        make invoice
+                    </button>
+
+                    <div *ngIf="isWaitingForCustomer(repair)" class="waiting-message">
+                        <span class="badge bg-warning text-dark">Waiting for customer approval</span>
+                    </div>
                 </div>
             </div>
 
@@ -83,10 +89,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button (click)="openEditModal(i)" class="ml-2 text-blue-600 hover:text-blue-800 text-sm">
-                            Edit
-                          </button>
 
                         <!-- Description and Material -->
                         <div class="flex-1 min-w-[300px]">
@@ -121,6 +123,9 @@
                                     rep.status.user === false ? 'Rejected' : 'Pending' }}
                                 </span>
                             </div>
+                            <button (click)="openEditModal(i)" class="ml-2 text-sm bg-green-600 text-white p-2">
+                                Edit
+                            </button>
                         </div>
                     </div>
                 </div>

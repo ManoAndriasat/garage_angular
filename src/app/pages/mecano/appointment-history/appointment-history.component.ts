@@ -33,6 +33,7 @@ export class AppointmentHistoryComponent implements OnInit {
       owner: appointment.user,
       car: appointment.car,
       mechanic: appointment.mechanic,
+      isfinished: false,
       reparation: []
     };
     console.log('Repair data:', repairData);

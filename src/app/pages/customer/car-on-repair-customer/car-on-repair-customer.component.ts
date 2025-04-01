@@ -14,6 +14,9 @@ export class CarOnRepairCustomerComponent implements OnInit {
   repairs: any[] = []; // Changed from currentRepair to repairs array
   isLoading = true;
   error: string | null = null;
+  showFinishConfirmation = false;
+  repairToFinish: string | null = null;
+  isSubmitting = false;
 
   constructor(private customerService: CustomerService) {}
 
@@ -37,6 +40,7 @@ export class CarOnRepairCustomerComponent implements OnInit {
       }
     });
   }
+  
 
   acceptReparation(repairId: string, index: number): void {
     const isConfirmed = confirm('Are you sure you want to accept this reparation?');
@@ -60,6 +64,40 @@ export class CarOnRepairCustomerComponent implements OnInit {
         }
       });
     }
+  }
+
+  finishAsCustomer(): void {
+    if (!this.repairToFinish || this.isSubmitting) return;
+  
+    this.isSubmitting = true;
+    this.error = null;
+  
+    this.customerService.finishAsCustomer(this.repairToFinish).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        const index = this.repairs.findIndex(r => r._id === this.repairToFinish);
+        if (index !== -1) {
+          this.repairs[index] = response.repair;
+        }
+        this.showFinishConfirmation = false;
+        this.repairToFinish = null;
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.error = err.error?.message || 'Failed to complete repair';
+        console.error(err);
+      }
+    });
+  }
+  
+  openFinishConfirmation(repairId: string): void {
+    this.repairToFinish = repairId;
+    this.showFinishConfirmation = true;
+  }
+  
+  cancelFinish(): void {
+    this.showFinishConfirmation = false;
+    this.repairToFinish = null;
   }
 
   formatDate(dateString: string): string {

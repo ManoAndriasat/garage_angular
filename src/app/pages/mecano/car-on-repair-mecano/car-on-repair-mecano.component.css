@@ -1,0 +1,14 @@
+/* Add to your component's CSS file */
+.actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .waiting-message, .completed-message {
+    margin-top: 0.5rem;
+  }
+  
+  .btn {
+    margin-right: 0.5rem;
+  }

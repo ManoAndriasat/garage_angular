@@ -133,4 +133,17 @@ export class MecanoService {
       { headers }
     );
   }
+
+  finishAsMechanic(repairId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+    
+    return this.http.post(
+      `${this.apiUrl}/finish-repair`,
+      { _id: repairId },
+      { headers }
+    );
+  }
 }

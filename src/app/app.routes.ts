@@ -14,6 +14,7 @@ import { DashboardComponent } from './pages/manager/dashboard/dashboard.componen
 import { AuthGuard } from './guards/auth.guard';
 import { FutureAppointmentComponent } from './pages/mecano/future-appointment/future-appointment.component';
 import { AppointmentHistoryComponent } from './pages/mecano/appointment-history/appointment-history.component';
+import { InvoiceComponent } from './pages/customer/invoice/invoice.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,6 +24,7 @@ export const routes: Routes = [
     { path: 'appointment-form', component: AppointmentFormComponent },
     { path: 'appointment-list-customer', component: AppointmentListCustomerComponent },
     { path: 'car-on-repair-customer', component: CarOnRepairCustomerComponent },
+    {path: 'invoice', component: InvoiceComponent},
 
     {path: 'login-mecano', component: LoginMecanoComponent},
     {path: 'appointment-list-mecano', component: AppointmentListMecanoComponent, canActivate: [AuthGuard], data: { roles: [5] }},

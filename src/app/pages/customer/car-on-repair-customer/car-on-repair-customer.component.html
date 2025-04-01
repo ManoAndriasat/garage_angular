@@ -1,10 +1,9 @@
 <div class="min-h-screen bg-gray-50 p-6">
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">My Vehicle Repairs</h1>
-        <p class="text-gray-600">View and manage your ongoing repairs</p>
+    <div class="mb-5 bg-white rounded-[5px] shadow-md py-2 px-4">
+        <p class="text-gray-800">Vehicle Repairs</p>
+        <p class="text-gray-600">Manage ongoing repairs</p>
     </div>
-
     <!-- Loading State -->
     <div *ngIf="isLoading" class="flex justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -30,6 +29,28 @@
     <div *ngIf="repairs.length > 0 && !isLoading">
         <div *ngFor="let repair of repairs" class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
 
+            <div *ngIf="showFinishConfirmation" class="modal-backdrop">
+                <div class="confirmation-modal">
+                    <h3>Confirm Repair Completion</h3>
+                    <p>Are you sure you want to mark this repair as complete? This will generate an invoice.</p>
+
+                    <div class="modal-actions">
+                        <button (click)="cancelFinish()" [disabled]="isSubmitting" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                        <button (click)="finishAsCustomer()" [disabled]="isSubmitting" class="btn btn-primary">
+                            {{ isSubmitting ? 'Processing...' : 'Confirm' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add this to your repair item display -->
+            <button *ngIf="repair.isfinished?.mechanic && !repair.isfinished?.user"
+                (click)="openFinishConfirmation(repair._id)" class="btn btn-success">
+                Complete Repair
+            </button>
+
             <div class="p-8 border-b border-gray-200">
                 <div class="flex justify-between items-start">
                     <div>
@@ -47,9 +68,6 @@
                             <p class="text-gray-600">
                                 <span class="font-medium">Contact:</span>
                                 {{ repair.mechanic?.contact }}
-                            </p>
-                            <p class="text-gray-500 text-sm mt-2">
-                                Created: {{ formatDate(repair.createdAt) }}
                             </p>
                         </div>
                     </div>

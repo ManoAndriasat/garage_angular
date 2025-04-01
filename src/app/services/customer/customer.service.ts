@@ -13,6 +13,12 @@ export class CustomerService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
+  }
 
   registerUser(user: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, user);
@@ -23,66 +29,42 @@ export class CustomerService {
   }
 
   registerCar(car: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`, 
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.post(`${this.apiUrl}/car`, car, { headers });
   }
 
   getAllCars(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`, 
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.get(`${this.apiUrl}/cars`, { headers });
   }
 
   createAppointment(appointment: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`, 
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.post(`${this.apiUrl}/appointment`, appointment, { headers });
   }
 
   getAppointments(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`, 
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.get(`${this.apiUrl}/appointments`, { headers });
   }
 
   getRepairs(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.get(`${this.apiUrl}/repairs`, { headers });
   }
 
   cancelAppointment(appointmentId: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.post(`${this.apiUrl}/cancel-appointment`, { appointmentId }, { headers });
   }
 
   validateAppointment(appointmentId: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.post(`${this.apiUrl}/validate-appointment`, { appointmentId }, { headers });
   }
 
   acceptReparation(repairId: string, reparationIndex: number): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     
     return this.http.post(`${this.apiUrl}/accept-reparation`, 
       { repair_id: repairId, reparation_index: reparationIndex }, 
@@ -91,11 +73,36 @@ export class CustomerService {
   }
 
   getOngoingRepairs(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getHeaders();
     return this.http.get(`${this.apiUrl}/ongoing-repairs`, { headers });
-  }  
+  }
+
+  finishAsCustomer(repairId: string): Observable<any> {
+    const headers = this.getHeaders();
+    
+    return this.http.post(
+      `${this.apiUrl}/finish-repair`,
+      { _id: repairId },
+      { headers }
+    );
+  }
+
+
+  getClientInvoices(carId?: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/invoices`, {
+      headers: this.getHeaders(),
+      params: carId ? { car_id: carId } : {}
+    });
+  }
+
+  downloadInvoicePDF(invoiceId: string): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/download-invoice`, 
+      { invoice_id: invoiceId },
+      { 
+        headers: this.getHeaders(),
+        responseType: 'blob' 
+      }
+    );
+  }
 }
 
