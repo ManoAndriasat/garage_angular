@@ -36,8 +36,7 @@ export class AppointmentHistoryComponent implements OnInit {
       isfinished: false,
       reparation: []
     };
-    console.log('Repair data:', repairData);
-
+  
     this.mecanoService.createRepair(repairData).subscribe({
       next: (response) => {
         this.isCreatingRepair = false;
@@ -45,7 +44,14 @@ export class AppointmentHistoryComponent implements OnInit {
       },
       error: (err) => {
         this.isCreatingRepair = false;
-        this.handleApiError(err);
+        if (err.error?.error) {
+          this.errorMessage = err.error.error;
+        } else if (err.error) {
+          this.errorMessage = err.error;
+        } else {
+          this.errorMessage = 'An unknown error occurred';
+        }
+        setTimeout(() => this.errorMessage = null, 5000);
       }
     });
   }
