@@ -51,7 +51,7 @@ export class AppointmentHistoryComponent implements OnInit {
   }
 
   private handleApiError(error: any) {
-    this.errorMessage = (error.message);
+    this.errorMessage = (error.error);
     setTimeout(() => this.errorMessage = null, 5000);
   }
 
