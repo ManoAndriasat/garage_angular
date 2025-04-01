@@ -1,118 +1,150 @@
-<header class="bg-gray-50 border-b border-gray-200">
-  <!-- Customer Section -->
-  <div class="container-fluid py-2 px-4 bg-gray-900 text-gray-300 transition-colors">
-    <div class="flex items-center">
-      <div class="header-text">
-        <a [routerLink]="['/login']" class="nav-link text-gray-900 hover:text-blue-600 font-medium transition-colors">
-          Login Customer
-        </a>
+<header class="bg-[#FB2C2E] text-gray-300 border-b shadow-md mb-5">
+  <!-- Mobile Header (visible on small screens) -->
+  <div class="md:hidden">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="logo text-white font-bold text-xl">
+        GARAGE
       </div>
 
-      <nav class="ms-auto" *ngIf="userRole === 0">
-        <ul class="flex items-center space-x-4">
-          <li class="mx-1">
-            <a [routerLink]="['/sign']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Sign</a>
-          </li>
-          <li class="mx-1">
-            <a [routerLink]="['/car-register']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Car Register</a>
-          </li>
-          <li class="mx-1">
-            <a [routerLink]="['/invoice']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Invoice</a>
-          </li>
-          
-          <!-- Customer Dropdown -->
-          <li class="relative group">
-            <button class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors flex items-center">
-              <span class="whitespace-nowrap">Appointments</span>
-              <svg class="w-4 h-4 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-1 py-1 w-48 z-10 border border-gray-200">
-              <a [routerLink]="['/appointment-form']" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Appointment Form</a>
-              <a [routerLink]="['/appointment-list-customer']" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Appointment List</a>
-            </div>
-          </li>
-
-          <li class="mx-1">
-            <a [routerLink]="['/car-on-repair-customer']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Car On Repair</a>
-          </li>
-        </ul>
-      </nav>
+      <!-- Burger Menu Button -->
+      <button 
+        (click)="toggleMobileMenu()"
+        class="text-white focus:outline-none"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            stroke-width="2" 
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
     </div>
-  </div>
 
-  <!-- Mechanic Section -->
-  <div class="container-fluid py-2 px-4 bg-gray-900 text-gray-300 transition-colors">
-    <div class="flex items-center">
-      <div class="header-text">
-        <a [routerLink]="['/login-mecano']" class="nav-link text-gray-900 hover:text-blue-600 font-medium transition-colors">
-          Login mecano
-        </a>
-      </div>
-
-      <nav class="ms-auto" *ngIf="userRole === 5">
-        <ul class="flex items-center space-x-4">
-          <li class="mx-1">
-            <a [routerLink]="['/car-on-repair-mecano']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Car On Repair</a>
-          </li>
-          
-          <!-- Mechanic Dropdown -->
-          <li class="relative group">
-            <button class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors flex items-center">
-              Appointments
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-1 py-1 w-48 z-10 border border-gray-200">
-              <a [routerLink]="['/appointment-list-mecano']" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Waiting</a>
-              <a [routerLink]="['/future-appointment']" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Future</a>
-              <a [routerLink]="['/appointment-history']" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">History</a>
-            </div>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-
-  <!-- Manager Section -->
-  <div class="container-fluid py-2 px-4 bg-gray-900 text-gray-300 transition-colors">
-    <div class="flex items-center">
-      <div class="header-text">
-        <a [routerLink]="['/login-manager']" class="nav-link text-gray-900 hover:text-blue-600 font-medium transition-colors">
-          Login manager
-        </a>
-      </div>
-
-      <nav class="ms-auto" *ngIf="userRole === 10">
-        <ul class="flex items-center space-x-4">
-          <li class="mx-1">
-            <a [routerLink]="['/login-manager']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Login</a>
-          </li>
-          <li class="mx-1">
-            <a [routerLink]="['/dashboard']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Dashboard</a>
-          </li>
-          <li class="mx-1">
-            <a [routerLink]="['/appointment-list-manager']" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md transition-colors">Appointments</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-
-  <!-- Divider -->
-  <div class="border-t border-gray-200"></div>
-
-  <!-- Welcome & Logout Section -->
-  <div class="container-fluid flex justify-between items-center py-2 px-4 bg-gray-50" *ngIf="hasToken()">
-    <p class="header-text text-gray-900 font-medium">Welcome</p>
-    <button 
-      (click)="logout()" 
-      type="button" 
-      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+    <!-- Mobile Menu Dropdown -->
+    <div 
+      class="bg-[#FB2C2E] px-4 py-2 transition-all duration-300 ease-in-out"
+      [class.hidden]="!isMobileMenuOpen"
     >
-      logout
-    </button>
+      <nav *ngIf="hasToken()">
+        <ul class="space-y-2">
+          <li *ngFor="let item of getNavItems()">
+            <!-- Simple Links -->
+            <a 
+              *ngIf="!item.items" 
+              [routerLink]="[item.link]"
+              class="block text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium"
+              (click)="isMobileMenuOpen = false"
+            >
+              {{ item.label }}
+            </a>
+
+            <!-- Dropdown Links -->
+            <div *ngIf="item.items">
+              <button 
+                (click)="toggleMobileDropdown(item.label)"
+                class="w-full text-left text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium flex justify-between items-center"
+              >
+                <span>{{ item.label }}</span>
+                <svg 
+                  class="w-4 h-4 transform transition-transform duration-200"
+                  [class.rotate-180]="mobileOpenDropdown === item.label"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              
+              <div 
+                class="pl-4 overflow-hidden transition-all duration-300 ease-in-out"
+                [class.max-h-0]="mobileOpenDropdown !== item.label"
+                [class.max-h-[500px]="mobileOpenDropdown === item.label"
+              >
+                <a 
+                  *ngFor="let subItem of item.items" 
+                  [routerLink]="[subItem.link]"
+                  class="block text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium"
+                  (click)="isMobileMenuOpen = false"
+                >
+                  {{ subItem.label }}
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Welcome & Logout in mobile menu -->
+      <div class="bg-gray-900 text-white mt-2 rounded-md" *ngIf="hasToken()">
+        <div class="px-4 py-2 flex justify-between items-center">
+          <p class="font-medium">Welcome {{ getRoleName() }}</p>
+          <button 
+            (click)="logout()" 
+            class="bg-white text-blue-700 hover:bg-gray-100 px-4 py-1 rounded-md font-medium transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Header (hidden on small screens) -->
+  <div class="hidden md:block">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-3">
+        <!-- Logo -->
+        <div class="logo text-white font-bold text-xl">
+          GARAGE
+        </div>
+
+        <!-- Navigation Links -->
+        <nav *ngIf="hasToken()">
+          <ul class="flex items-center space-x-2">
+            <li *ngFor="let item of getNavItems()" class="relative">
+              <!-- Simple Links -->
+              <a *ngIf="!item.items" 
+                [routerLink]="[item.link]"
+                class="text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium flex items-center">
+                {{ item.label }}
+              </a>
+
+              <!-- Dropdown Links -->
+              <div *ngIf="item.items" class="relative group">
+                <button class="text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium flex items-center space-x-1">
+                  <span>{{ item.label }}</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div class="absolute right-0 hidden group-hover:block bg-white shadow-lg rounded-md mt-1 py-1 min-w-[200px] z-50 border border-gray-200">
+                  <a *ngFor="let subItem of item.items" 
+                    [routerLink]="[subItem.link]"
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    {{ subItem.label }}
+                  </a>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Welcome & Logout Bar -->
+    <div class="bg-gray-900 text-white" *ngIf="hasToken()">
+      <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+        <p class="font-medium">Welcome {{ getRoleName() }}</p>
+        <button (click)="logout()" 
+                class="bg-white text-blue-700 hover:bg-gray-100 px-4 py-1 rounded-md font-medium transition-colors">
+          Logout
+        </button>
+      </div>
+    </div>
   </div>
 </header>
