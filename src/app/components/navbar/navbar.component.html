@@ -115,17 +115,37 @@
               </a>
 
               <!-- Dropdown Links -->
-              <div *ngIf="item.items" class="relative group">
-                <button class="text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium flex items-center space-x-1">
+              <div *ngIf="item.items" class="relative inline-block">
+                <!-- Clickable label/button -->
+                <button 
+                  (click)="toggleDropdown()"
+                  [class.bg-gray-900]="isOpen"
+                  class="text-white hover:bg-gray-900 px-4 py-2 rounded-md transition-colors font-medium flex items-center space-x-1 mx-auto relative"
+                >
                   <span>{{ item.label }}</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg 
+                    class="w-4 h-4 transition-transform duration-200" 
+                    [class.rotate-180]="isOpen"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </button>
-                <div class="absolute right-0 hidden group-hover:block bg-white shadow-lg rounded-md mt-1 py-1 min-w-[200px] z-50 border border-gray-200">
-                  <a *ngFor="let subItem of item.items" 
+              
+                <!-- Dropdown menu - properly centered below label -->
+                <div 
+                  *ngIf="isOpen"
+                  (click)="$event.stopPropagation()"
+                  class="absolute left-5 right-0 w-auto min-w-[200px] mt-1 bg-white shadow-lg rounded-md py-1 z-50 border border-gray-200 animate-fadeIn"
+                  style="width: max-content;"
+                >
+                  <a 
+                    *ngFor="let subItem of item.items" 
                     [routerLink]="[subItem.link]"
-                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-200 hover:text-blue-600 transition-colors"
+                  >
                     {{ subItem.label }}
                   </a>
                 </div>
