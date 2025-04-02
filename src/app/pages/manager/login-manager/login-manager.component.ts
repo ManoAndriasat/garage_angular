@@ -12,8 +12,8 @@ import { LoginManagerService } from '../../../services/manager/login-manager.ser
   styleUrls: ['./login-manager.component.css']
 })
 export class LoginManagerComponent {
-  contact: string = '';
-  password: string = '';
+  contact: string = '0343373351';
+  password: string = 'manager';
   message: string = '';
 
   constructor(private authService: AuthService,private ManagerService: LoginManagerService, private router: Router) {}
