@@ -33,6 +33,36 @@ export class CustomerService {
     return this.http.post(`${this.apiUrl}/car`, car, { headers });
   }
 
+  deleteExistingCarModel(id: string, model: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/existing-cars/${id}/model`, 
+      { 
+        headers: this.getHeaders(),
+        body: { model }
+      }
+    );
+  }
+
+  deleteCar(carId: string): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.delete(`${this.apiUrl}/delete-car`, {
+      headers,
+      body: { carId }
+    });
+  }
+
+
+  updateCar(carData: { 
+    carId: string,
+    brand: string,
+    model: string,
+    year: number,
+    vin: string
+}): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.put(`${this.apiUrl}/update-car`, carData, { headers });
+}
+
   getAllCars(): Observable<any> {
     const headers = this.getHeaders();
     return this.http.get(`${this.apiUrl}/cars`, { headers });
