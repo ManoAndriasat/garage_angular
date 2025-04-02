@@ -76,22 +76,21 @@ export class CarFormDialogComponent implements OnInit {
 
   registerCar() {
     this.carData.owner = this.authService.getId() ?? 'defaultOwnerId';
-    this.carData.vin = this.vinData.vin;
+    this.carData.vin = this.vinData.vin.trim() === '' ? '0000' : this.vinData.vin;
     console.log('Cars Data:', this.carData);
 
     this.userService.registerCar(this.carData).subscribe({
       next: (response) => {
         this.message = 'Car registered successfully!';
         console.log('Success:', response);
-        this.dialogRef.close();
+        this.dialogRef.close(response);
       },
       error: (error) => {
         this.message = 'Registration failed: ' + (error.error?.msg || 'Unknown error');
         console.error('Error:', error);
       },
     });
-    this.dialogRef.close(this.carData);
-  }
+}
 
   fetchCarDetailsByVin(vin: string): Observable<any> {
     const vinDecodedUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;
