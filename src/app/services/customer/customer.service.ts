@@ -51,7 +51,6 @@ export class CustomerService {
     });
   }
 
-
   updateCar(carData: { 
     carId: string,
     brand: string,
@@ -116,7 +115,6 @@ export class CustomerService {
       { headers }
     );
   }
-
 
   getClientInvoices(carId?: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/invoices`, {

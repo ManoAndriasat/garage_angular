@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MecanoService } from '../../../services/mecano/mecano.service';
+import { ManagerService } from '../../../services/manager/manager.service';
 
 @Component({
   selector: 'app-car-on-repair-mecano',
@@ -17,6 +18,7 @@ export class CarOnRepairMecanoComponent implements OnInit {
   showAddModal = false;
   isSubmitting = false;
   selectedRepairId: string | null = null;
+  materials: any[] = [];
 
   newReparation = {
     type: '',
@@ -38,11 +40,44 @@ export class CarOnRepairMecanoComponent implements OnInit {
     price: 0,
     isSubmitting: false
   };
-  constructor(private mecanoService: MecanoService) { }
+  constructor(private mecanoService: MecanoService, private managerService: ManagerService) {}
 
   ngOnInit(): void {
     this.loadRepairs();
+    this.loadMaterials();
   }
+
+  onTypeChange() {
+    if (this.newReparation.type !== 'Replacement') {
+      this.newReparation.material = '';
+      this.newReparation.price = 0;
+    }
+  }
+  
+  onMaterialChange() {
+    if (this.newReparation.type === 'Replacement' && this.newReparation.material) {
+      const selectedMaterial = this.materials.find(m => m.ref === this.newReparation.material);
+      if (selectedMaterial) {
+        this.newReparation.price = selectedMaterial.price;
+      }
+    }
+  }
+
+  loadMaterials() {
+    this.isLoading = true;
+    this.managerService.getMaterials().subscribe({
+      next: (response) => {
+        this.materials = response;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.error = 'Failed to load materials';
+        console.error('Error fetching materials:', error);
+      }
+    });
+  }
+
 
   loadRepairs(): void {
     this.isLoading = true;
