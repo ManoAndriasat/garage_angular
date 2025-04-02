@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ManagerService } from '../../services/manager/manager.service';
 
 @Component({
   selector: 'app-car-form-dialog',
@@ -15,17 +16,22 @@ import { map } from 'rxjs/operators';
   templateUrl: './car-form-dialog.component.html',
   styleUrls: ['./car-form-dialog.component.css'],
 })
-export class CarFormDialogComponent {
+export class CarFormDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CarFormDialogComponent>,
     private userService: CustomerService,
     private authService: AuthService,
-    private http: HttpClient
+    private http: HttpClient,
+    private managerService: ManagerService
   ) { }
 
   currentYear: number = new Date().getFullYear();
   years: number[] = Array.from({ length: this.currentYear - 1979 }, (_, i) => 1980 + i);
-
+  
+  // Store available brands and models
+  carBrands: any[] = [];
+  availableModels: string[] = [];
+  
   carData = {
     owner: '',
     brand: '',
@@ -40,6 +46,33 @@ export class CarFormDialogComponent {
   };
 
   message = '';
+
+  ngOnInit(): void {
+    this.loadCarBrands();
+  }
+
+  loadCarBrands(): void {
+    this.managerService.getExistingCars().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.carBrands = response.data;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading car brands:', error);
+        this.message = 'Error loading car brands';
+      }
+    });
+  }
+
+  onBrandChange(): void {
+    // Reset model when brand changes
+    this.carData.model = '';
+    
+    // Find selected brand and get its models
+    const selectedBrand = this.carBrands.find(brand => brand.brand === this.carData.brand);
+    this.availableModels = selectedBrand ? [...selectedBrand.model] : [];
+  }
 
   registerCar() {
     this.carData.owner = this.authService.getId() ?? 'defaultOwnerId';
@@ -59,7 +92,6 @@ export class CarFormDialogComponent {
     });
     this.dialogRef.close(this.carData);
   }
-
 
   fetchCarDetailsByVin(vin: string): Observable<any> {
     const vinDecodedUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`;
@@ -88,6 +120,14 @@ export class CarFormDialogComponent {
       (response: any) => {
         if (response.Results.length > 0) {
           this.vinData.carDetails = response.Results[0];
+          // Auto-fill brand and model if available from VIN
+          if (response.Results[0].Make) {
+            this.carData.brand = response.Results[0].Make;
+            this.onBrandChange();
+          }
+          if (response.Results[0].Model) {
+            this.carData.model = response.Results[0].Model;
+          }
         } else {
           this.vinData.carDetails = null;
           this.message = 'No details found for this VIN';
