@@ -14,13 +14,6 @@ export class ManagerService {
     private authService: AuthService
   ) { }
   
-  registerUser(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, user);
-  }
-
-  login(contact: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { contact, password });
-  }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
