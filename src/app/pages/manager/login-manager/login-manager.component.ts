@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { ManagerService } from '../../../services/manager/manager.service';
+import { LoginManagerService } from '../../../services/manager/login-manager.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -16,7 +16,7 @@ export class LoginManagerComponent {
   password: string = '';
   message: string = '';
 
-  constructor(private authService: AuthService,private ManagerService: ManagerService, private router: Router) {}
+  constructor(private authService: AuthService,private ManagerService: LoginManagerService, private router: Router) {}
 
   loginUser() {
     console.log('Logging in with:', this.contact, this.password);
