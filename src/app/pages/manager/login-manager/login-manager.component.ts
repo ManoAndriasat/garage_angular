@@ -8,8 +8,8 @@ import { ManagerService } from '../../../services/manager/manager.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './manager.component.html',
-  styleUrls: ['./manager.component.css']
+  templateUrl: './login-manager.component.html',
+  styleUrls: ['./login-manager.component.css']
 })
 export class LoginManagerComponent {
   contact: string = '';
