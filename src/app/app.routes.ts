@@ -15,6 +15,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { FutureAppointmentComponent } from './pages/mecano/future-appointment/future-appointment.component';
 import { AppointmentHistoryComponent } from './pages/mecano/appointment-history/appointment-history.component';
 import { InvoiceComponent } from './pages/customer/invoice/invoice.component';
+import { MechanicRegisterComponent } from './pages/manager/mechanic-register/mechanic-register.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -35,4 +36,5 @@ export const routes: Routes = [
     {path: 'login-manager', component: LoginManagerComponent},
     {path: 'appointment-list-manager', component: AppointmentListManagerComponent,canActivate: [AuthGuard], data: { roles: [10] }},
     {path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard], data: { roles: [10] }},
+    {path: 'mechanic-register', component: MechanicRegisterComponent,canActivate: [AuthGuard], data: { roles: [10] }},
 ];

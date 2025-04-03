@@ -1,0 +1,75 @@
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+    <!-- Header -->
+    <div class="p-4 border-b border-gray-100">
+      <h2 class="text-xl font-bold text-gray-800">Revenue Analytics</h2>
+    </div>
+
+    <!-- Content -->
+    <div class="p-4 space-y-4">
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="flex justify-center items-center py-16">
+        <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !isLoading" class="flex items-center gap-2 p-4 rounded-lg bg-red-50 text-red-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+
+      <!-- Content -->
+      <div *ngIf="!isLoading && !error" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Mechanic Selector -->
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Mechanic</label>
+            <select 
+              [formControl]="selectedMechanic"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white"
+            >
+              <option *ngFor="let mechanic of mechanics" [value]="mechanic._id">
+                {{ mechanic.firstname }} {{ mechanic.lastname }}
+              </option>
+            </select>
+          </div>
+
+          <!-- View Selector -->
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-1">View</label>
+            <select 
+              [formControl]="selectedView"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white"
+            >
+              <option value="year">By Year</option>
+              <option value="month">By Month</option>
+            </select>
+          </div>
+
+          <!-- Year Selector (only shown for month view) -->
+          <div *ngIf="selectedView.value === 'month'" class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+            <select 
+              [formControl]="selectedYear"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white"
+            >
+              <option *ngFor="let year of getYearOptions()" [value]="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Chart - Full width -->
+        <div class="w-full h-[calc(100vh-200px)]">
+          <canvas baseChart
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [type]="barChartType"
+            class="w-full h-full">
+          </canvas>
+        </div>
+      </div>
+    </div>
+</div>

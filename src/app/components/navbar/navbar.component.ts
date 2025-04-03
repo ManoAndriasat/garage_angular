@@ -53,6 +53,7 @@ export class NavbarComponent {
 
   managerNavItems = [
     { label: 'Dashboard', link: '/dashboard' },
+    { label: 'Register Mechanic', link: '/mechanic-register' },
     { label: 'All Appointments', link: '/appointment-list-manager' }
   ];
 
