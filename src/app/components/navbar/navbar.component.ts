@@ -29,28 +29,6 @@ export class NavbarComponent {
     this.mobileOpenDropdown = this.mobileOpenDropdown === label ? null : label;
   }
 
-
-  customerNavItems = [
-    { label: 'Sign Up', link: '/sign' },
-    { label: 'Register Car', link: '/car-register' },
-    { label: 'New Appointment', link: '/appointment-form' },
-    { label: 'My Appointments', link: '/appointment-list-customer' },
-    { label: 'Cars in Repair', link: '/car-on-repair-customer' },
-    { label: 'Invoices', link: '/invoice' },
-  ];
-
-  mechanicNavItems = [
-    { label: 'Current Repairs', link: '/car-on-repair-mecano' },
-    { label: 'Waiting Appointments', link: '/appointment-list-mecano' },
-    { label: 'Future Appointments', link: '/future-appointment' },
-    { label: 'History', link: '/appointment-history' }
-  ];
-
-  managerNavItems = [
-    { label: 'Dashboard', link: '/dashboard' },
-    { label: 'Register Mechanic', link: '/mechanic-register' },
-    { label: 'All Appointments', link: '/appointment-list-manager' }
-  ];
   ngOnInit() {
     this.userRole = this.authService.getUserRole();
   }
@@ -104,7 +82,7 @@ export class NavbarComponent {
     } else if (this.userRole === 10) {
       return [
         { label: 'Dashboard', link: '/dashboard' },
-        { label: 'All Appointments', link: '/appointment-list-manager' }
+        { label: 'Mechanic register', link: '/mechanic-register' }
       ];
     }
     return [];
