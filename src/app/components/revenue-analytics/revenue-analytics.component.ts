@@ -40,7 +40,7 @@ export class RevenueAnalyticsComponent implements OnInit, OnDestroy {
       x: {
         title: {
           display: true,
-          text: 'Période'
+          text: 'Period'
         }
       },
       y: {
@@ -150,14 +150,14 @@ export class RevenueAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   updateYearChart(yearlyRevenue: { [year: number]: number }): void {
-    const years = Object.keys(yearlyRevenue).sort();
-    const revenues = years.map(year => yearlyRevenue[parseInt(year)]);
-
+    const years = this.getYearOptions().sort((a, b) => a - b);
+    const revenues = years.map(year => yearlyRevenue[year] || 0); 
+  
     this.barChartData = {
-      labels: years,
+      labels: years.map(y => y.toString()),
       datasets: [{
         data: revenues,
-        label: 'Revenue annuel',
+        label: 'Annual Revenue',
         backgroundColor: '#4f46e5',
         hoverBackgroundColor: '#6366f1'
       }]
@@ -172,7 +172,7 @@ export class RevenueAnalyticsComponent implements OnInit, OnDestroy {
       labels: monthNames,
       datasets: [{
         data: revenues,
-        label: `Revenue mensuel ${year}`,
+        label: `Monthly Revenue ${year}`,
         backgroundColor: '#4f46e5',
         hoverBackgroundColor: '#6366f1'
       }]
