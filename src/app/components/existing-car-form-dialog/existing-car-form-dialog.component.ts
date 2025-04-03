@@ -16,6 +16,7 @@ export class ExistingCarFormDialogComponent {
   isSubmitting = false;
   errorMessage = '';
   submitted = false;
+  isEditBrand = false;
 
   constructor(
     public dialogRef: MatDialogRef<ExistingCarFormDialogComponent>,
@@ -24,15 +25,31 @@ export class ExistingCarFormDialogComponent {
     private managerService: ManagerService,
   ) {
     this.carForm = this.fb.group({
-      brand: ['', data.mode === 'create' ? [Validators.required] : null],
-      model: ['', [Validators.required]]
+      brand: ['', [Validators.required]],
+      model: ['']
     });
+
+    if (data.mode === 'create') {
+      this.carForm.get('model')?.setValidators([Validators.required]);
+    }
 
     if (data.mode === 'edit' && data.car) {
       this.carForm.patchValue({
-        brand: data.car.brand
+        brand: data.car.brand,
+        model: ''
       });
-      this.carForm.get('brand')?.disable();
+    }
+  }
+
+  toggleEditBrand(): void {
+    this.isEditBrand = !this.isEditBrand;
+    const brandControl = this.carForm.get('brand');
+    if (brandControl) {
+      if (this.isEditBrand) {
+        brandControl.enable();
+      } else {
+        brandControl.disable();
+      }
     }
   }
 
@@ -48,27 +65,43 @@ export class ExistingCarFormDialogComponent {
     this.errorMessage = '';
     
     const formData = this.carForm.value;
-    formData.brand = formData.brand || this.data.car?.brand;
 
-    const operation = this.data.mode === 'create'
-      ? this.managerService.createExistingCar({
-          brand: formData.brand,
-          model: formData.model.split(',').map((m: string) => m.trim())
-        })
-      : this.managerService.updateExistingCar(this.data.car._id, {
-          $push: { model: formData.model }
-        });
-
-    operation.subscribe({
-      next: () => {
-        this.dialogRef.close('success');
-      },
-      error: (err) => {
-        console.error('Error saving car:', err);
-        this.errorMessage = this.extractErrorMessage(err);
-        this.isSubmitting = false;
+    if (this.data.mode === 'create') {
+      this.managerService.createExistingCar({
+        brand: formData.brand,
+        model: formData.model.split(',').map((m: string) => m.trim())
+      }).subscribe({
+        next: () => {
+          this.dialogRef.close('success');
+        },
+        error: (err) => {
+          console.error('Error saving car:', err);
+          this.errorMessage = this.extractErrorMessage(err);
+          this.isSubmitting = false;
+        }
+      });
+    } else {
+      const updates: any = {};
+      
+      if (this.isEditBrand && formData.brand !== this.data.car.brand) {
+        updates.brand = formData.brand;
       }
-    });
+      
+      if (formData.model) {
+        updates.model = [formData.model];
+      }
+
+      this.managerService.updateExistingCar(this.data.car._id, updates).subscribe({
+        next: () => {
+          this.dialogRef.close('success');
+        },
+        error: (err) => {
+          console.error('Error updating car:', err);
+          this.errorMessage = this.extractErrorMessage(err);
+          this.isSubmitting = false;
+        }
+      });
+    }
   }
 
   private extractErrorMessage(err: any): string {
