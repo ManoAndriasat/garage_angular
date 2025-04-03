@@ -8,7 +8,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class MecanoService {
   constructor(private http: HttpClient, private authService: AuthService) { }
-  private apiUrl = 'http://localhost:5000/mechanics';
+  private apiUrl = 'https://mygarage-fujn.onrender.com/mechanics';
 
 
   registerUser(user: any): Observable<any> {

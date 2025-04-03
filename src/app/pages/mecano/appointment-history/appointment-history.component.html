@@ -1,64 +1,70 @@
-<div class="m-10">
-    <div class="mb-3 p-6  shadow text-white bg-blue-900">
+<div class="container mx-auto px-4 py-6">
+    <!-- Header -->
+    <div class="mb-3 p-6  shadow text-white bg-blue-600">
         Waiting Appointments
     </div>
 
     <!-- Loading state -->
-    <div *ngIf="isLoading" class="text-center py-10">
+    <div *ngIf="isLoading" class="py-8 text-center text-gray-600">
         <p>Loading appointments...</p>
     </div>
 
     <!-- Error state -->
-    <div *ngIf="error && !isLoading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3  mb-4">
-        {{ error }}
-        <button (click)="loadAppointments()" class="ml-4 text-blue-600">Retry</button>
+    <div *ngIf="error && !isLoading" class="bg-red-50 border-t border-b border-red-200 text-red-600 px-4 py-3 mb-4 text-sm flex items-center">
+        <span>{{ error }}</span>
+        <button (click)="loadAppointments()" class="ml-3 text-blue-600 hover:text-blue-800 text-sm">Retry</button>
     </div>
 
     <!-- Empty state -->
-    <div *ngIf="!isLoading && !error && appointments.length === 0" class="text-center py-10">
-        <p>No waiting appointments found.</p>
+    <div *ngIf="!isLoading && !error && appointments.length === 0" class="py-8 text-center text-gray-600 border-t border-b border-gray-200">
+        <p>No waiting appointments currently</p>
     </div>
 
-    <!-- Appointments list -->
-    <div *ngFor="let appointment of appointments" class="mb-8 p-6 bg-white  shadow">
-        <div class="flex justify-between items-start">
-            <div>
-                <h3 class="text-xl font-semibold">
-                    {{ appointment.car.brand }} {{ appointment.car.model }} {{ appointment.car.year }}
-                    <span class="text-sm font-normal text-gray-600">
-                        ({{ formatDate(appointment.date) }})
-                    </span>
-                </h3>
-
-                <div class="mt-2">
-                    <p class="text-gray-600">
-                        <span class="font-medium">Customer:</span>
-                        {{ appointment.user.firstname }} {{ appointment.user.lastname }} - {{ appointment.user.contact }}
-                    </p>
-                    <p class="text-gray-600">
-                        <span class="font-medium">Location:</span>
-                        {{ appointment.localisation }}
-                    </p>
-                    <p class="text-gray-600">
-                        <span class="font-medium">Time:</span>
+    <!-- Appointments Table -->
+    <table *ngIf="!isLoading && !error && appointments.length > 0" class="w-full border-collapse">
+        <thead>
+            <tr class="border-b border-gray-200 text-left text-sm text-gray-600">
+                <th class="p-3 font-medium">Vehicle</th>
+                <th class="p-3 font-medium">Date/Time</th>
+                <th class="p-3 font-medium">Customer</th>
+                <th class="p-3 font-medium">Location</th>
+                <th class="p-3"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let appointment of appointments" class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="p-3">
+                    <div class="font-medium">{{ appointment.car.brand }} {{ appointment.car.model }}</div>
+                    <div class="text-sm text-gray-500">{{ appointment.car.year }}</div>
+                </td>
+                <td class="p-3">
+                    <div>{{ formatDate(appointment.date) }}</div>
+                    <div class="text-sm text-gray-500">
                         {{ formatTime(appointment.start_time) }} - {{ formatTime(appointment.end_time) }}
-                    </p>
-                </div>
-            </div>
+                    </div>
+                </td>
+                <td class="p-3">
+                    <div>{{ appointment.user.firstname }} {{ appointment.user.lastname }}</div>
+                    <div class="text-sm text-gray-500">{{ appointment.user.contact }}</div>
+                </td>
+                <td class="p-3 text-sm">
+                    {{ appointment.localisation }}
+                </td>
+                <td class="p-3 text-right">
+                    <button
+                        (click)="beginRepair(appointment)"
+                        [disabled]="isCreatingRepair"
+                        class="px-3 py-1.5 bg-[#FB2C2E] text-white text-sm hover:bg-[#D92525] disabled:bg-gray-300">
+                        {{ isCreatingRepair ? 'Processing...' : 'Begin repair' }}
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-            <div class="flex space-x-2 gap-2">
-                <button
-                (click)="beginRepair(appointment)"
-                [disabled]="isCreatingRepair"
-                class="px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 disabled:bg-indigo-300">
-                {{ isCreatingRepair ? 'Starting...' : 'Begin Repair' }}
-            </button>
-            </div>
-        </div>
+    <!-- Error message -->
+    <div *ngIf="errorMessage" class="mt-4 bg-red-50 border-t border-b border-red-200 text-red-600 px-4 py-3 text-sm flex justify-between items-center">
+        <span>{{ errorMessage }}</span>
+        <button (click)="errorMessage = null" class="text-gray-500 hover:text-gray-700 text-lg">×</button>
     </div>
-
-    <div *ngIf="errorMessage" class="error-alert">
-        {{ errorMessage }}
-        <button (click)="errorMessage = null">×</button>
-      </div>
 </div>

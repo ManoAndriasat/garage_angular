@@ -1,9 +1,9 @@
-<div class="min-h-screen bg-gray-50 p-6">
+<div class="container mx-auto px-4 py-6">
     <!-- Header -->
-    <div class="mb-5 bg-white rounded-[5px] shadow-md py-2 px-4">
-        <p class="text-gray-800">Vehicle Repairs</p>
-        <p class="text-gray-600">Manage ongoing repairs</p>
+    <div class="mb-3 p-6 shadow text-white bg-blue-600 rounded-[5px]">
+        <p class="text-lg">Manage ongoing repairs</p>
     </div>
+
     <!-- Loading State -->
     <div *ngIf="isLoading" class="flex justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -25,47 +25,50 @@
         </div>
     </div>
 
-    <!-- Repair Content -->
-    <div *ngIf="repairs.length > 0 && !isLoading">
-        <div *ngFor="let repair of repairs" class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
-
-            <div *ngIf="showFinishConfirmation" class="modal-backdrop">
-                <div class="confirmation-modal">
-                    <h3>Confirm Repair Completion</h3>
-                    <p>Are you sure you want to mark this repair as complete? This will generate an invoice.</p>
-
-                    <div class="modal-actions">
-                        <button (click)="cancelFinish()" [disabled]="isSubmitting" class="btn btn-secondary">
+    <!-- Repairs List -->
+    <div *ngIf="repairs.length > 0 && !isLoading" class="space-y-6">
+        <div *ngFor="let repair of repairs" class="bg-white rounded-[5px] shadow-md overflow-hidden">
+            <!-- Finish Confirmation Modal -->
+            <div *ngIf="showFinishConfirmation" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Confirm Repair Completion</h3>
+                    <p class="text-sm text-gray-600 mb-4">Are you sure you want to mark this repair as complete? This will generate an invoice.</p>
+                    <div class="flex justify-end gap-3">
+                        <button (click)="cancelFinish()" [disabled]="isSubmitting" class="px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200">
                             Cancel
                         </button>
-                        <button (click)="finishAsCustomer()" [disabled]="isSubmitting" class="btn btn-primary">
+                        <button (click)="finishAsCustomer()" [disabled]="isSubmitting" class="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                             {{ isSubmitting ? 'Processing...' : 'Confirm' }}
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Add this to your repair item display -->
-            <button *ngIf="repair.isfinished?.mechanic && !repair.isfinished?.user"
-                (click)="openFinishConfirmation(repair._id)" class="btn btn-success">
-                Complete Repair
-            </button>
+            <!-- Complete Repair Button -->
+            <div class="p-4 border-b border-gray-200 flex justify-end">
+                <button *ngIf="repair.isfinished?.mechanic && !repair.isfinished?.user"
+                    (click)="openFinishConfirmation(repair._id)"
+                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700">
+                    Complete Repair
+                </button>
+            </div>
 
-            <div class="p-8 border-b border-gray-200">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-semibold text-gray-800">
+            <!-- Vehicle Info -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+                    <div class="flex-1">
+                        <h2 class="text-xl font-semibold text-gray-800">
                             {{ repair.car?.brand }} - {{ repair.car?.model }}
-                            <span class="text-lg font-normal text-gray-600 ml-2">
+                            <span class="text-base font-normal text-gray-600 ml-2">
                                 ({{ repair.car?.year }})
                             </span>
                         </h2>
-                        <div class="mt-4 space-y-2">
-                            <p class="text-gray-600">
+                        <div class="mt-3 space-y-1">
+                            <p class="text-sm text-gray-600">
                                 <span class="font-medium">Mechanic:</span>
                                 {{ repair.mechanic?.firstname }} {{ repair.mechanic?.lastname }}
                             </p>
-                            <p class="text-gray-600">
+                            <p class="text-sm text-gray-600">
                                 <span class="font-medium">Contact:</span>
                                 {{ repair.mechanic?.contact }}
                             </p>
@@ -75,64 +78,61 @@
             </div>
 
             <!-- Reparations List -->
-            <div class="divide-y divide-gray-200 px-8">
-                <div *ngFor="let rep of repair.reparation; let i = index"
-                    class="py-6 hover:bg-gray-50 transition-colors">
-                    <div class="flex flex-col md:flex-row gap-6 items-start">
+            <div class="divide-y divide-gray-200 px-6">
+                <div *ngFor="let rep of repair.reparation; let i = index" class="py-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex flex-col md:flex-row gap-4 items-start">
                         <!-- Problem Info -->
-                        <div class="flex items-center gap-4 min-w-[200px]">
+                        <div class="flex items-center gap-3 min-w-[180px]">
                             <div class="flex-shrink-0">
-                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                     </svg>
                                 </div>
                             </div>
                             <div>
-                                <h3 class="font-medium text-gray-800">{{ rep.type }}</h3>
-                                <div class="mt-1 text-sm text-gray-500">
+                                <h3 class="text-sm font-medium text-gray-800">{{ rep.type }}</h3>
+                                <div class="mt-1 text-xs text-gray-500">
                                     {{ formatDate(rep.start) }} → {{ formatDate(rep.end) }}
                                 </div>
                             </div>
                         </div>
 
                         <!-- Description and Material -->
-                        <div class="flex-1 min-w-[300px]">
-                            <p class="text-gray-600">{{ rep.description }}</p>
-                            <div *ngIf="rep.material" class="mt-2 text-sm text-gray-500">
+                        <div class="flex-1 min-w-[250px]">
+                            <p class="text-sm text-gray-600">{{ rep.description }}</p>
+                            <div *ngIf="rep.material" class="mt-1 text-xs text-gray-500">
                                 <span class="font-medium">Material:</span> {{ rep.material }}
-                                <span class="font-medium">Price:</span> {{ rep.price }}
+                                <span class="font-medium ml-2">Price:</span> {{ rep.price | currency }}
                             </div>
                         </div>
 
                         <!-- Status and Actions -->
-                        <div class="flex flex-col gap-3 min-w-[200px]">
+                        <div class="flex flex-col gap-1 min-w-[150px]">
                             <div class="flex items-center">
-                                <span class="text-sm font-medium mr-2">Mechanic:</span>
-                                <span [ngClass]="{
-                              'text-green-600': rep.status.mechanic,
-                              'text-red-600': !rep.status.mechanic
-                          }">
+                                <span class="text-xs font-medium mr-1">Mechanic:</span>
+                                <span class="text-xs" [ngClass]="{
+                                    'text-green-600': rep.status.mechanic,
+                                    'text-red-600': !rep.status.mechanic
+                                }">
                                     {{ rep.status.mechanic ? 'Approved' : 'Pending' }}
                                 </span>
                             </div>
                             <div class="flex items-center">
-                                <span class="text-sm font-medium mr-2">Your Status:</span>
-                                <span [ngClass]="{
-                              'text-green-600': rep.status.user,
-                              'text-red-600': rep.status.user === false,
-                              'text-yellow-600': rep.status.user === undefined || rep.status.user === null
-                          }">
+                                <span class="text-xs font-medium mr-1">Your Status:</span>
+                                <span class="text-xs" [ngClass]="{
+                                    'text-green-600': rep.status.user,
+                                    'text-red-600': rep.status.user === false,
+                                    'text-yellow-600': rep.status.user === undefined || rep.status.user === null
+                                }">
                                     {{ rep.status.user === true ? 'Approved' :
-                                    rep.status.user === false ? 'Rejected' : 'Pending' }}
+                                    rep.status.user === false ? 'Pending' : 'Pending' }}
                                 </span>
                             </div>
-                            <div *ngIf="rep.status.mechanic && (rep.status.user === false || rep.status.user === null)"
-                                class="flex gap-2 mt-2">
-                                <button (click)="acceptReparation(repair._id, i)"
-                                    class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700">
+                            <div *ngIf="rep.status.mechanic && (rep.status.user === false || rep.status.user === null)" class="mt-1">
+                                <button (click)="acceptReparation(repair._id, i)" 
+                                    class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700">
                                     Accept
                                 </button>
                             </div>
@@ -141,16 +141,15 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!repairs && !isLoading && !error" class="text-center py-16">
+    <div *ngIf="repairs.length === 0 && !isLoading && !error" class="text-center py-16">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">No ongoing repairs</h3>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No ongoing repairs</h3>
         <p class="mt-1 text-sm text-gray-500">You currently don't have any vehicles in repair.</p>
     </div>
 </div>

@@ -1,8 +1,7 @@
-<div class="min-h-screen bg-gray-50 p-6">
+<div class="container mx-auto px-4 py-6">
     <!-- Header -->
-    <div class="mb-5 bg-white rounded-[5px] shadow-md py-2 px-4">
-        <p class="text-gray-800">Vehicle Repairs</p>
-        <p class="text-gray-600">Manage ongoing repairs</p>
+    <div class="mb-3 p-6 shadow text-white bg-blue-600 rounded-[5px]">
+        <p class="text-lg">Manage ongoing repairs</p>
     </div>
 
     <!-- Loading State -->
@@ -30,52 +29,56 @@
     <div *ngIf="repairs.length > 0 && !isLoading" class="space-y-6">
         <div *ngFor="let repair of repairs" class="bg-white rounded-[5px] shadow-md overflow-hidden">
             <!-- Vehicle Info -->
-            <div class="p-8 border-b border-gray-200">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-semibold text-gray-800">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+                    <div class="flex-1">
+                        <h2 class="text-xl font-semibold text-gray-800">
                             {{ repair.car?.brand }} - {{ repair.car?.model }}
-                            <span class="text-lg font-normal text-gray-600 ml-2">
+                            <span class="text-base font-normal text-gray-600 ml-2">
                                 ({{ repair.car?.year }})
                             </span>
                         </h2>
-                        <div class="mt-4 space-y-2">
-                            <p class="text-gray-600">
+                        <div class="mt-3 space-y-1">
+                            <p class="text-sm text-gray-600">
                                 <span class="font-medium">Owner:</span>
                                 {{ repair.owner?.firstname }} {{ repair.owner?.lastname }}
                             </p>
-                            <p class="text-gray-600">
+                            <p class="text-sm text-gray-600">
                                 <span class="font-medium">Contact:</span>
                                 {{ repair.owner?.contact }}
                             </p>
                         </div>
                     </div>
-                    <button (click)="openAddModal(repair._id)"
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-                        new reparation
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <button (click)="openAddModal(repair._id)"
+                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                            New Reparation
+                        </button>
 
-                    <button *ngIf="!repair.isfinished?.mechanic && !repair.isfinished?.user"
-                        (click)="finishAsMechanic(repair._id)" [disabled]="isSubmitting" class="btn btn-primary">
-                        make invoice
-                    </button>
+                        <button *ngIf="!repair.isfinished?.mechanic && !repair.isfinished?.user"
+                            (click)="finishAsMechanic(repair._id)" [disabled]="isSubmitting"
+                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700">
+                            Make Invoice
+                        </button>
 
-                    <div *ngIf="isWaitingForCustomer(repair)" class="waiting-message">
-                        <span class="badge bg-warning text-dark">Waiting for customer approval</span>
+                        <div *ngIf="isWaitingForCustomer(repair)"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded shadow-sm bg-yellow-100 text-yellow-800">
+                            Waiting for customer approval
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Reparations List -->
-            <div class="divide-y divide-gray-200 px-8">
+            <div class="divide-y divide-gray-200 px-6">
                 <div *ngFor="let rep of repair.reparation; let i = index"
-                    class="py-6 hover:bg-gray-50 transition-colors">
-                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                    class="py-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex flex-col md:flex-row gap-4 items-start">
                         <!-- Problem Info -->
-                        <div class="flex items-center gap-4 min-w-[200px]">
+                        <div class="flex items-center gap-3 min-w-[180px]">
                             <div class="flex-shrink-0">
-                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                    <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -83,29 +86,29 @@
                                 </div>
                             </div>
                             <div>
-                                <h3 class="font-medium text-gray-800">{{ rep.type }}</h3>
-                                <div class="mt-1 text-sm text-gray-500">
+                                <h3 class="text-sm font-medium text-gray-800">{{ rep.type }}</h3>
+                                <div class="mt-1 text-xs text-gray-500">
                                     {{ formatDate(rep.start) }} → {{ formatDate(rep.end) }}
                                 </div>
                             </div>
                         </div>
 
                         <!-- Description and Material -->
-                        <div class="flex-1 min-w-[300px]">
-                            <p class="text-gray-600">{{ rep.description }}</p>
-                            <div *ngIf="rep.material" class="mt-2 text-sm text-gray-500">
+                        <div class="flex-1 min-w-[250px]">
+                            <p class="text-sm text-gray-600">{{ rep.description }}</p>
+                            <div *ngIf="rep.material" class="mt-1 text-xs text-gray-500">
                                 <span class="font-medium">Material:</span> {{ rep.material }}
                             </div>
-                            <div class="mt-2 text-sm">
+                            <div class="mt-1 text-xs">
                                 <span class="font-medium">Price:</span> {{ rep.price | currency }}
                             </div>
                         </div>
 
-                        <!-- Status Indicators -->
-                        <div class="flex flex-col gap-2 min-w-[150px]">
+                        <!-- Status Indicators and Actions -->
+                        <div class="flex flex-col gap-1 min-w-[120px]">
                             <div class="flex items-center">
-                                <span class="text-sm font-medium mr-2">Mechanic:</span>
-                                <span [ngClass]="{
+                                <span class="text-xs font-medium mr-1">Mechanic:</span>
+                                <span class="text-xs" [ngClass]="{
                                     'text-green-600': rep.status.mechanic,
                                     'text-red-600': !rep.status.mechanic
                                 }">
@@ -113,8 +116,8 @@
                                 </span>
                             </div>
                             <div class="flex items-center">
-                                <span class="text-sm font-medium mr-2">Client:</span>
-                                <span [ngClass]="{
+                                <span class="text-xs font-medium mr-1">Client:</span>
+                                <span class="text-xs" [ngClass]="{
                                     'text-green-600': rep.status.user,
                                     'text-red-600': !rep.status.user,
                                     'text-yellow-600': rep.status.user === null
@@ -123,7 +126,8 @@
                                     rep.status.user === false ? 'Rejected' : 'Pending' }}
                                 </span>
                             </div>
-                            <button (click)="openEditModal(i)" class="ml-2 text-sm bg-green-600 text-white p-2">
+                            <button (click)="openEditModal(i)"
+                                class="mt-1 items-center px-2 py-1 border border-transparent font-medium rounded shadow-sm text-white bg-green-600 ">
                                 Edit
                             </button>
                         </div>
@@ -148,7 +152,7 @@
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium text-gray-800">Add New Problem</h3>
+                    <h3 class="text-lg font-medium text-gray-800">new reparation</h3>
                     <button (click)="showAddModal = false; selectedRepairId = null;"
                         class="text-gray-400 hover:text-gray-500">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -161,15 +165,20 @@
                 <form (ngSubmit)="addReparation()" class="space-y-4">
                     <div>
                         <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Problem Type</label>
-                        <input type="text" id="type" [(ngModel)]="newReparation.type" name="type" required
+                        <select id="type" [(ngModel)]="newReparation.type" name="type" required
                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                            <option value="" disabled selected>Select a problem type</option>
+                            <option value="Replacement">Replacement</option>
+                            <option value="Fixing">Fixing</option>
+                            <option value="Diagnostic">Diagnostic</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
                     </div>
 
                     <div>
                         <label for="description"
                             class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea id="description" [(ngModel)]="newReparation.description" name="description" rows="3"
-                            required
                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"></textarea>
                     </div>
 
