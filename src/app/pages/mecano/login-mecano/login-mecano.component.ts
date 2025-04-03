@@ -12,8 +12,8 @@ import { MecanoService } from '../../../services/mecano/mecano.service';
   styleUrls: ['./login-mecano.component.css']
 })
 export class LoginMecanoComponent {
-  contact: string = '';
-  password: string = '';
+  contact: string = '0343373351';
+  password: string = 'mechanic';
   message: string = '';
 
   constructor(private authService: AuthService,private MecanoService: MecanoService, private router: Router) {}

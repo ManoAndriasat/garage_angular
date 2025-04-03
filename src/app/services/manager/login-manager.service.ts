@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginManagerService {
-  private apiUrl = 'http://localhost:5000/managers';
+  private apiUrl = 'https://mygarage-fujn.onrender.com/managers';
 
   constructor(private http: HttpClient) {}
 

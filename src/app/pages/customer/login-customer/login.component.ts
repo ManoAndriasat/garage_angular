@@ -14,8 +14,8 @@ import { CustomerService } from '../../../services/customer/customer.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  contact: string = '';
-  password: string = '';
+  contact: string = '0343373351';
+  password: string = 'customer';
   message: string = '';
 
   constructor(private authService: AuthService,private CustomerService: CustomerService, private router: Router) {}
