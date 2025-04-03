@@ -45,6 +45,46 @@ export class ManagerService {
     );
   }
 
+  getExistingCars(): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/existing-cars`, 
+      { headers: this.getHeaders() }
+    );
+  }
+  
+  createExistingCar(carData: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/existing-cars`, 
+      carData, 
+      { headers: this.getHeaders() }
+    );
+  }
+  
+  updateExistingCar(id: string, updates: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/existing-cars/${id}`, 
+      updates, 
+      { headers: this.getHeaders() }
+    );
+  }
+  
+  deleteExistingCar(id: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/existing-cars/${id}`, 
+      { headers: this.getHeaders() }
+    );
+  }
+  
+  deleteExistingCarModel(id: string, model: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/existing-cars/${id}/model`, 
+      { 
+        headers: this.getHeaders(),
+        body: { model }
+      }
+    );
+  }
+
   getDashboardOverview(): Observable<any> {
     return this.http.get(
       `${this.apiUrl}/dashboard/overview`, 

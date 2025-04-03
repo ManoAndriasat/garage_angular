@@ -1,0 +1,74 @@
+<div class="bg-white shadow-xl rounded-lg overflow-hidden">
+  <!-- Header -->
+  <div class="p-4 bg-black text-white text-center">
+      <h2 class="text-xl font-bold">
+          {{ data.mode === 'create' ? 'Add New Car Brand' : 'Add Model to ' + data.car.brand }}
+      </h2>
+  </div>
+
+  <!-- Form Content -->
+  <div class="p-8">
+      <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <!-- Brand Field (only for create) -->
+          <div *ngIf="data.mode === 'create'">
+              <label class="block mb-2 text-sm font-medium text-gray-700">Brand</label>
+              <input type="text" formControlName="brand"
+                  [class.border-red-500]="submitted && f['brand'].invalid"
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="e.g. Toyota">
+              <div *ngIf="submitted && f['brand'].invalid" 
+                  class="mt-1 text-sm text-red-500">
+                  <span *ngIf="f['brand'].errors?.['required']">Brand is required</span>
+              </div>
+          </div>
+
+          <!-- Model Field -->
+          <div>
+              <label class="block mb-2 text-sm font-medium text-gray-700">
+                  {{ data.mode === 'create' ? 'Models (comma separated)' : 'New Model' }}
+              </label>
+              <input type="text" formControlName="model"
+                  [class.border-red-500]="submitted && f['model'].invalid"
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  [placeholder]="data.mode === 'create' ? 'e.g. Corolla, Camry, Prius' : 'e.g. Prius'">
+              <div *ngIf="submitted && f['model'].invalid" 
+                  class="mt-1 text-sm text-red-500">
+                  <span *ngIf="f['model'].errors?.['required']">Model is required</span>
+              </div>
+              <p *ngIf="data.mode === 'create'" class="mt-1 text-xs text-gray-500">
+                  Enter multiple models separated by commas
+              </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end space-x-4 pt-4">
+              <button 
+                  type="button"
+                  (click)="onCancel()"
+                  class="px-6 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+              >
+                  Cancel
+              </button>
+              <button 
+                  type="submit"
+                  [disabled]="isSubmitting"
+                  class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors disabled:bg-indigo-300"
+              >
+                  <span *ngIf="!isSubmitting">{{ data.mode === 'create' ? 'Add Brand' : 'Add Model' }}</span>
+                  <span *ngIf="isSubmitting" class="flex items-center">
+                      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                  </span>
+              </button>
+          </div>
+      </form>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
+          {{ errorMessage }}
+      </div>
+  </div>
+</div>

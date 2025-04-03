@@ -82,7 +82,8 @@ export class NavbarComponent {
     } else if (this.userRole === 10) {
       return [
         { label: 'Dashboard', link: '/dashboard' },
-        { label: 'Mechanic register', link: '/mechanic-register' }
+        { label: 'Mechanics', link: '/mechanics' },
+        { label: 'Existing cars', link: '/existing-cars' },
       ];
     }
     return [];
