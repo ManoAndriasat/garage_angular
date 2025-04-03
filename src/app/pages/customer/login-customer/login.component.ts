@@ -17,15 +17,20 @@ export class LoginComponent {
   contact: string = '0343373351';
   password: string = 'customer';
   message: string = '';
+  isLoading: boolean = false; // Add loading state
 
-  constructor(private authService: AuthService,private CustomerService: CustomerService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private CustomerService: CustomerService, 
+    private router: Router
+  ) {}
 
   loginUser() {
-    console.log('Logging in with:', this.contact, this.password);
+    this.isLoading = true; // Show loader when login starts
+    this.message = ''; // Clear previous messages
 
     this.CustomerService.login(this.contact, this.password).subscribe({
       next: (response) => {
-        console.log('Login successful:', response);
         this.authService.saveToken(response.token);
         this.authService.saveUser(response.user);
         this.message = 'Login successful!';
@@ -36,6 +41,10 @@ export class LoginComponent {
       error: (error) => {
         console.error('Login failed:', error);
         this.message = 'Invalid contact or password';
+        this.isLoading = false; // Hide loader on error
+      },
+      complete: () => {
+        this.isLoading = false; // Hide loader when complete (optional)
       }
     });
   }

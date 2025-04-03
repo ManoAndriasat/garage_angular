@@ -1,56 +1,74 @@
 <body class="bg-gray-50 flex justify-center p-4">
-    <div class="w-full max-w-md">
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6 pb-0">
-          <div class="flex justify-center mb-6">
-            <svg class="w-10 h-10 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-              <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-            </svg>
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="p-6 pb-0">
+        <div class="flex justify-center mb-6">
+          <svg class="w-10 h-10 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+          </svg>
+        </div>
+        <h1 class="text-center text-2xl font-medium text-gray-800 mb-2">Welcome back</h1>
+        <p class="text-center text-gray-500 text-sm">Sign in to your account</p>
+      </div>
+
+      <div class="px-8 py-6">
+        <form (submit)="loginUser(); $event.preventDefault()" class="space-y-4">
+          <div>
+            <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
+            <div class="relative">
+              <input type="text" [(ngModel)]="contact" name="contact" required
+                     class="block w-full px-4 py-3 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                     value="0343373351">
+            </div>
           </div>
-          <h1 class="text-center text-2xl font-medium text-gray-800 mb-2">Welcome back</h1>
-          <p class="text-center text-gray-500 text-sm">Sign in to your account</p>
-        </div>
-  
-        <div class="px-8 py-6">
-          <form (submit)="loginUser(); $event.preventDefault()" class="space-y-4">
-            <div>
-              <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
-              <div class="relative">
-                <input type="text" [(ngModel)]="contact" name="contact" required
-                       class="block w-full px-4 py-3 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                       value="0343373351">
-              </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+              <a href="#" class="text-xs text-blue-600 hover:text-blue-800 hover:underline">Forgot password?</a>
             </div>
-  
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <a href="#" class="text-xs text-blue-600 hover:text-blue-800 hover:underline">Forgot password?</a>
-              </div>
-              <div class="relative">
-                <input type="password" [(ngModel)]="password" name="password" required
-                       class="block w-full px-4 py-3 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                       value="customer">
-              </div>
+            <div class="relative">
+              <input type="password" [(ngModel)]="password" name="password" required
+                     class="block w-full px-4 py-3 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                     value="customer">
             </div>
- 
-  
-            <div>
-              <button type="submit"
-                      class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                Sign in
-              </button>
-            </div>
-          </form>
-          <div class="flex justify-between p-6 text-sm border-t border-gray-200 bg-gray-50">
-            <a [routerLink]="['/sign']" class="font-medium text-indigo-600 hover:underline">
-                Create Account
-            </a>
+          </div>
+
+          <div>
+            <button type="submit" [disabled]="isLoading"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition disabled:opacity-75 disabled:cursor-not-allowed">
+              <span *ngIf="!isLoading">Sign in</span>
+              <span *ngIf="isLoading" class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Full-page loader overlay (shown during loading) -->
+        <div *ngIf="isLoading" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div class="bg-white p-6 rounded-lg shadow-lg flex items-center">
+            <svg class="animate-spin h-8 w-8 text-blue-600 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Logging in...</span>
+          </div>
         </div>
-  
-          <p *ngIf="message" class="mt-4 text-center text-sm text-red-600">{{ message }}</p>
+
+        <div class="flex justify-between p-6 text-sm border-t border-gray-200 bg-gray-50">
+          <a [routerLink]="['/sign']" class="font-medium text-indigo-600 hover:underline">
+              Create Account
+          </a>
         </div>
+
+        <p *ngIf="message" class="mt-4 text-center text-sm text-red-600">{{ message }}</p>
       </div>
     </div>
-  </body>
+  </div>
+</body>
