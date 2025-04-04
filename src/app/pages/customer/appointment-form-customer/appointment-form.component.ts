@@ -31,7 +31,8 @@ export class AppointmentFormComponent implements OnInit {
 
   mechanics: any[] = [];
   cars: any[] = [];
-
+  message_error: string | null = null;
+  
   constructor(
     private authService: AuthService,
     private customerService: CustomerService,
@@ -71,6 +72,9 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   submitForm() {
+    // Clear previous error message
+    this.message_error = null;
+
     const dateObj = new Date(this.formData.date);
     this.formData.start_time = dateObj.toISOString();
     
@@ -91,30 +95,40 @@ export class AppointmentFormComponent implements OnInit {
       firstname: this.formData.mechanic.firstname,
       lastname: this.formData.mechanic.lastname,
       contact: this.formData.mechanic.contact
-    }
+    };
 
     const appointmentData = {
       user,
-      car: this.formData.car,  // Send entire car object
-      mechanic: selectedMechanic,  // Send entire mechanic object
+      car: this.formData.car,
+      mechanic: selectedMechanic,
       date: this.formData.date,
       start_time: this.formData.start_time,
       end_time: this.formData.end_time,
       localisation: this.formData.localisation,
-      problem: this.formData.problem,
+      problem: this.formData.problem.map(p => ({
+        material: p.material || '',
+        description: p.description
+      })),
       status: this.formData.status
     };
     
-    console.log('Appointment Data:', appointmentData);
-
     this.customerService.createAppointment(appointmentData).subscribe({
       next: (response) => {
-        console.log('Appointment created successfully:', response);
         this.router.navigate(['/appointment-list-customer']);
       },
       error: (error) => {
         console.error('Error creating appointment:', error);
+        
+        if (error.error?.msg) {
+          this.message_error = error.error.msg;
+        } else if (error.error?.message) {
+          this.message_error = error.error.message;
+        } else if (error.message) {
+          this.message_error = error.message;
+        } else {
+          this.message_error = 'An unknown error occurred while creating the appointment';
+        }
       }
     });
-  }
+}
 }

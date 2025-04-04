@@ -100,7 +100,7 @@
                                 <span class="font-medium">Material:</span> {{ rep.material }}
                             </div>
                             <div class="mt-1 text-xs">
-                                <span class="font-medium">Price:</span> {{ rep.price | currency }}
+                                <span class="font-medium">Price:</span> {{ rep.price }} MGA
                             </div>
                         </div>
 
@@ -161,11 +161,12 @@
                         </svg>
                     </button>
                 </div>
-
+    
                 <form (ngSubmit)="addReparation()" class="space-y-4">
                     <div>
                         <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Problem Type</label>
                         <select id="type" [(ngModel)]="newReparation.type" name="type" required
+                            (change)="onTypeChange()"
                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
                             <option value="" disabled selected>Select a problem type</option>
                             <option value="Replacement">Replacement</option>
@@ -174,14 +175,14 @@
                             <option value="Maintenance">Maintenance</option>
                         </select>
                     </div>
-
+    
                     <div>
                         <label for="description"
-                            class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            class="block text-sm font-medium text-gray-700 mb-1">Description <span class="text-sm">(optional)</span></label>
                         <textarea id="description" [(ngModel)]="newReparation.description" name="description" rows="3"
                             class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"></textarea>
                     </div>
-
+    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="start" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
@@ -195,21 +196,37 @@
                                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="material" class="block text-sm font-medium text-gray-700 mb-1">Material
-                                (optional)</label>
-                            <input type="text" id="material" [(ngModel)]="newReparation.material" name="material"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
-                        </div>
-                        <div>
-                            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                            <input type="number" id="price" [(ngModel)]="newReparation.price" name="price" required
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+    
+                    <div *ngIf="newReparation.type === 'Replacement'">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="material" class="block text-sm font-medium text-gray-700 mb-1">Material</label>
+                                <select id="material" [(ngModel)]="newReparation.material" name="material" required
+                                    (change)="onMaterialChange()"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                                    <option value="" disabled selected>Select a material</option>
+                                    <option *ngFor="let material of materials" [value]="material.ref">{{material.name}}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                                <input type="number" id="price" [(ngModel)]="newReparation.price" name="price" required
+                                    [readonly]="newReparation.type === 'Replacement'"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border bg-gray-100">
+                            </div>
                         </div>
                     </div>
-
+    
+                    <div *ngIf="newReparation.type !== 'Replacement'">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                                <input type="number" id="price" [(ngModel)]="newReparation.price" name="price" required
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                            </div>
+                        </div>
+                    </div>
+    
                     <div class="flex justify-end space-x-3 pt-4">
                         <button type="button" (click)="showAddModal = false; selectedRepairId = null;"
                             class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
