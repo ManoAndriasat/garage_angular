@@ -1,0 +1,21 @@
+/* Animation */
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
+    margin-left: 70px;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+  
+  /* Rotate chevron */
+  .rotate-180 {
+    transform: rotate(180deg);
+  }

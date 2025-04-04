@@ -1,12 +1,17 @@
 <div class="container mx-auto px-4 py-6">
     <!-- Header -->
     <div class="mb-3 p-6  shadow text-white bg-blue-600">
-        Waiting Appointments
+        Appointments History
     </div>
-
+    <p class="text-sm">(only current or past appointments are displayed)</p>
     <!-- Loading state -->
     <div *ngIf="isLoading" class="py-8 text-center text-gray-600">
         <p>Loading appointments...</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="mt-4 bg-red-50 border-t border-b border-red-200 text-red-600 px-4 py-3 text-sm flex justify-between items-center">
+        <span>{{ errorMessage }}</span>
+        <button (click)="errorMessage = null" class="text-gray-500 hover:text-gray-700 text-lg">×</button>
     </div>
 
     <!-- Error state -->
@@ -17,7 +22,8 @@
 
     <!-- Empty state -->
     <div *ngIf="!isLoading && !error && appointments.length === 0" class="py-8 text-center text-gray-600 border-t border-b border-gray-200">
-        <p>No waiting appointments currently</p>
+        <p>No appointments History available.</p>
+        <p class="mt-2">Please check back later.</p>
     </div>
 
     <!-- Appointments Table -->
@@ -52,19 +58,16 @@
                 </td>
                 <td class="p-3 text-right">
                     <button
-                        (click)="beginRepair(appointment)"
-                        [disabled]="isCreatingRepair"
-                        class="px-3 py-1.5 bg-[#FB2C2E] text-white text-sm hover:bg-[#D92525] disabled:bg-gray-300">
-                        {{ isCreatingRepair ? 'Processing...' : 'Begin repair' }}
-                    </button>
+                    (click)="beginRepair(appointment)"
+                    [disabled]="appointment.processing"
+                    class="px-3 py-1.5 bg-[#FB2C2E] text-white text-sm hover:bg-[#D92525] disabled:bg-gray-300">
+                    {{ appointment.processing ? 'Processing...' : 'Begin repair' }}
+                </button>
                 </td>
             </tr>
         </tbody>
     </table>
 
     <!-- Error message -->
-    <div *ngIf="errorMessage" class="mt-4 bg-red-50 border-t border-b border-red-200 text-red-600 px-4 py-3 text-sm flex justify-between items-center">
-        <span>{{ errorMessage }}</span>
-        <button (click)="errorMessage = null" class="text-gray-500 hover:text-gray-700 text-lg">×</button>
-    </div>
+
 </div>
