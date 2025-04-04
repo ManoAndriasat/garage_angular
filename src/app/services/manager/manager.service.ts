@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -82,6 +83,52 @@ export class ManagerService {
         headers: this.getHeaders(),
         body: { model }
       }
+    );
+  }
+
+  createMaterial(materialData: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/materials`, 
+      materialData, 
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getMaterials(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/materials`, { headers: this.getHeaders() }).pipe(
+      map((response: any) => {
+        return response.data.map((material: any) => {
+          const priceHistory = material.priceHistory;
+          if (priceHistory.length > 1) {
+            material.lastPrice = priceHistory[priceHistory.length - 2].price;
+          } else {
+            material.lastPrice = null;
+          }
+          return material;
+        });
+      })
+    );
+  }
+  
+  getMaterial(id: string): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/materials/${id}`, 
+      { headers: this.getHeaders() }
+    );
+  }
+
+  updateMaterial(id: string, updates: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/materials/${id}`, 
+      updates, 
+      { headers: this.getHeaders() }
+    );
+  }
+
+  deleteMaterial(id: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/materials/${id}`, 
+      { headers: this.getHeaders() }
     );
   }
 

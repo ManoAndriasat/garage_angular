@@ -84,6 +84,7 @@ export class NavbarComponent {
         { label: 'Dashboard', link: '/dashboard' },
         { label: 'Mechanics', link: '/mechanics' },
         { label: 'Existing cars', link: '/existing-cars' },
+        { label: 'Materials', link: '/materials' },
       ];
     }
     return [];
